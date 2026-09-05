@@ -1,0 +1,116 @@
+---
+import { ThemeToggle } from "./ThemeToggle";
+
+const navLinks = [
+  { label: 'Home', href: '/' },
+  { label: 'Projects', href: '/projects' },
+  { label: 'About', href: '/about' },
+  { label: 'AI Lab', href: '/lab' },
+  { label: 'Contact', href: '/contact' },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<header
+  class="sticky top-0 z-50 w-full transition-colors duration-300"
+  style="background: var(--nav-bg); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid var(--nav-border);"
+>
+  <div class="container mx-auto px-5 sm:px-8 h-14 flex items-center justify-between">
+    <!-- Logo -->
+    <a href="/" class="flex items-center gap-2" style="text-decoration: none;">
+      <span style="color: var(--text-primary); font-size: 16px; font-weight: 700; letter-spacing: -0.03em;">
+        Mohamed <span style="color: var(--color-accent);">ABIDI</span>
+      </span>
+    </a>
+
+    <!-- Desktop nav -->
+    <nav class="hidden md:flex items-center gap-7">
+      {navLinks.map(link => {
+        const isActive = currentPath === link.href || (link.href !== '/' && currentPath.startsWith(link.href));
+        return (
+          <a
+            href={link.href}
+            class="text-sm transition-colors duration-200"
+            style={{
+              color: isActive ? 'var(--color-accent)' : 'var(--text-muted)',
+              textDecoration: 'none',
+              fontWeight: isActive ? '600' : '400',
+            }}
+          >
+            {link.label}
+          </a>
+        );
+      })}
+    </nav>
+
+    <!-- Right Controls: CTA + Theme Toggle + Mobile Menu -->
+    <div class="flex items-center gap-3">
+      <!-- Download CV -->
+      <a
+        href="/cv/mohamed-abidi-cv.pdf"
+        download="Mohamed-Abidi-CV.pdf"
+        class="hidden sm:inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-medium transition-colors"
+        style="border: 1px solid var(--color-accent-border); color: var(--color-accent); background: var(--color-accent-soft); text-decoration: none;"
+      >
+        Download CV
+      </a>
+
+      <!-- Theme Switcher -->
+      <ThemeToggle client:load />
+
+      <!-- Mobile hamburger -->
+      <button
+        id="mobile-menu-btn"
+        class="md:hidden flex flex-col justify-center items-center gap-[5px] p-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] rounded"
+        aria-label="Open menu"
+      >
+        <div class="w-5 h-[2px] rounded-full transition-colors" style="background: var(--text-primary);"></div>
+        <div class="w-5 h-[2px] rounded-full transition-colors" style="background: var(--text-primary);"></div>
+        <div class="w-5 h-[2px] rounded-full transition-colors" style="background: var(--text-primary);"></div>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile overlay -->
+<div
+  id="mobile-menu"
+  class="fixed inset-0 md:hidden flex flex-col justify-center px-8 gap-8 transition-opacity duration-300"
+  style="z-index: 60; background: var(--nav-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); opacity: 0; pointer-events: none;"
+>
+  <button id="mobile-menu-close" class="absolute top-5 right-6 p-2 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]" aria-label="Close menu">
+    <div class="w-6 h-[2px] rotate-45 translate-y-[1px]" style="background: var(--text-primary);"></div>
+    <div class="w-6 h-[2px] -rotate-45 -translate-y-[1px]" style="background: var(--text-primary);"></div>
+  </button>
+  
+  {navLinks.map(link => (
+    <a href={link.href} class="text-2xl font-semibold" style="color: var(--text-primary); text-decoration: none;">
+      {link.label}
+    </a>
+  ))}
+  
+  <div class="pt-4 flex flex-col gap-4" style="border-top: 1px solid var(--border-color);">
+    <a href="/cv/mohamed-abidi-cv.pdf" download class="text-lg font-medium" style="color: var(--color-accent); text-decoration: none;">
+      Download CV ↓
+    </a>
+  </div>
+</div>
+
+<script is:inline>
+  const btn = document.getElementById('mobile-menu-btn');
+  const closeBtn = document.getElementById('mobile-menu-close');
+  const menu = document.getElementById('mobile-menu');
+  const toggle = (open) => {
+    if (!menu) return;
+    menu.style.opacity = open ? '1' : '0';
+    menu.style.pointerEvents = open ? 'auto' : 'none';
+    if (open) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+  };
+  btn?.addEventListener('click', () => toggle(true));
+  closeBtn?.addEventListener('click', () => toggle(false));
+</script>

@@ -1,0 +1,13 @@
+---
+import { cn } from "../../lib/utils";
+
+interface Props {
+  class?: string;
+}
+
+const { class: className, ...rest } = Astro.props;
+---
+
+<span class={cn("inline-flex items-center rounded-md bg-[var(--border-color)] px-2.5 py-0.5 text-xs font-mono uppercase tracking-wider text-[var(--text-primary)]", className)} {...rest}>
+  <slot />
+</span>

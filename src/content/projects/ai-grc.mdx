@@ -1,0 +1,56 @@
+---
+title: "AI-GRC Platform"
+subtitle: "Automating ISO 27001 Compliance with RAG and LLMs"
+tags: [".NET 8", "PostgreSQL", "Docker", "RAG", "LLM", "ISO 27001"]
+category: "AI/GenAI"
+context: "DRÄXLMAIER (2026)"
+date: "2026-06-01"
+featured: true
+---
+
+## Problem
+Compliance teams lose significant time manually cross-referencing internal policies with ISO 27001 requirements to detect compliance gaps. The process is labor-intensive and prone to human error.
+
+## Context
+Developed during an internship at DRÄXLMAIER. As an IT & AI Engineering Intern, I was responsible for monitoring virtualized infrastructure and building this AI-GRC platform to streamline compliance audits. *(Note: Certain details are generalized to respect project confidentiality).*
+
+## Architecture
+The system follows a modular architecture:
+- **Frontend**: Web interface for compliance officers.
+- **API (.NET 8)**: Orchestrates requests and manages business logic.
+- **Data**: PostgreSQL for document storage and audit trails.
+- **AI Pipeline**: RAG pipeline for document ingestion, embedding generation, and retrieval.
+
+## Technology
+| Technology | Role |
+|---|---|
+| .NET 8 | Backend API and orchestration layer |
+| PostgreSQL | Document storage, metadata, and audit trail |
+| Docker | Service isolation and deployment |
+| RAG | Retrieval-Augmented Generation for context-aware answers |
+| LLMs | Analyzing policies and detecting compliance gaps |
+
+## AI Pipeline
+1. **Ingestion**: Internal policy documents are uploaded and parsed.
+2. **Chunking**: Text is split into semantically meaningful chunks.
+3. **Embeddings**: Vector representations are generated for each chunk.
+4. **Vector DB**: Stored for similarity search.
+5. **Retrieval**: Relevant chunks are retrieved based on ISO 27001 queries.
+6. **LLM**: Analyzes the retrieved context to detect compliance gaps.
+
+## Engineering
+The backend is built with a modular .NET architecture. PostgreSQL is used with a strict schema to enforce RBAC and maintain a comprehensive audit trail, which is critical for ISO 27001 compliance. The entire stack is containerized with Docker for consistent deployments.
+
+## Challenges
+1. **RAG Latency vs. Relevance**: Balancing the number of retrieved chunks to provide enough context without exceeding LLM context windows or causing unacceptable latency.
+2. **Security & Compliance**: Ensuring that the AI system itself adheres to strict access controls (RBAC) and doesn't leak sensitive policy data across user roles.
+
+## Solutions
+1. Implemented a hybrid search approach (keyword + semantic) and tuned the chunk size to optimize relevance and speed.
+2. Enforced RBAC at the API layer and maintained detailed audit logs in PostgreSQL for every query and document access.
+
+## Results
+The platform successfully automated the preliminary gap analysis for ISO 27001 compliance, allowing compliance teams to focus on remediation rather than manual cross-referencing.
+
+## What I learned
+Building AI for enterprise compliance requires a deep focus on security and auditability, not just model accuracy. One limitation is the reliance on the LLM's interpretation of ambiguous policies, which requires a "human-in-the-loop" validation step for final audits.

@@ -1,0 +1,488 @@
+---
+import HomeLayout from '../layouts/HomeLayout.astro';
+import { HeroSection } from '../components/hero/HeroSection';
+import { getCollection } from 'astro:content';
+import { skillCategories } from '../data/skills';
+import { experiences, certificationsList } from '../data/experience';
+import { ArchitectureVisualizer } from '../components/visualizer/ArchitectureVisualizer';
+
+const projects = await getCollection('projects');
+const sortedProjects = projects.sort((a, b) => {
+  const order = ['ai-grc', 'etic-label-inspection', 'omnutrition', 'cyberhunter'];
+  return order.indexOf(a.id) - order.indexOf(b.id);
+});
+const featured = sortedProjects.slice(0, 2);
+const others = sortedProjects.slice(2);
+
+const categoryIcons: Record<string, string> = {
+  'AI/GenAI': '⬡',
+  'Computer Vision': '◎',
+  'Full-Stack': '▣',
+  'Cybersecurity': '◈',
+};
+---
+
+<HomeLayout title="Mohamed Abidi | AI Engineer & Data Scientist">
+
+  <!-- ═══ HERO (React island — handles its own nav + video + dual theme) ══ -->
+  <HeroSection client:load />
+
+  <!-- ═══ Transition band ════════════════════════════════════════════════ -->
+  <div style="height: 1px; background: linear-gradient(to right, transparent, var(--color-accent-border), transparent);"></div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════ -->
+  <!-- 01. SELECTED WORK                                                   -->
+  <!-- ═══════════════════════════════════════════════════════════════════ -->
+  <section id="projects" class="relative z-10 py-24 px-5 sm:px-8 md:px-10 lg:px-16 transition-colors duration-300" style="background: var(--bg-color);">
+    <div class="max-w-6xl mx-auto">
+
+      <!-- Section header -->
+      <div class="flex items-center gap-3 mb-3">
+        <div class="section-line"></div>
+        <span class="text-[11px] tracking-[0.16em] uppercase font-mono font-semibold" style="color: var(--color-accent);">Selected Work</span>
+      </div>
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold tracking-tight" style="color: var(--text-primary);">
+          Engineering <span style="color: var(--color-accent);">Case Studies</span>
+        </h2>
+        <a href="/projects" class="text-sm font-medium hover:underline flex items-center gap-1.5" style="color: var(--color-accent); text-decoration: none;">
+          All projects →
+        </a>
+      </div>
+
+      <!-- Featured 2 Dominant Projects -->
+      <div class="grid md:grid-cols-2 gap-6 mb-6">
+        {featured.map((project, index) => (
+          <a
+            href={`/projects/${project.id}`}
+            class="group relative overflow-hidden rounded-2xl flex flex-col transition-all duration-300"
+            style={{
+              background: 'var(--bg-card)',
+              border: '1px solid var(--border-card)',
+              boxShadow: 'var(--card-shadow)',
+              backdropFilter: 'blur(14px)',
+              minHeight: '340px',
+              textDecoration: 'none',
+            }}
+          >
+            <!-- Top number & category -->
+            <div class="p-6 pb-0 flex items-center justify-between">
+              <span class="text-xs font-mono font-bold" style={{ color: 'var(--color-accent)' }}>
+                0{index + 1}
+              </span>
+              <div class="flex items-center gap-3">
+                <span class="text-[11px] font-mono tracking-wider uppercase font-semibold" style={{ color: 'var(--color-accent)' }}>
+                  {categoryIcons[project.data.category] ?? '◆'} {project.data.category}
+                </span>
+                <span class="text-[11px] font-mono" style={{ color: 'var(--text-dim)' }}>
+                  {project.data.context}
+                </span>
+              </div>
+            </div>
+
+            <!-- Title & description -->
+            <div class="p-6 flex flex-col flex-grow">
+              <h3 class="text-xl md:text-2xl font-bold mb-3 group-hover:text-[var(--color-accent)] transition-colors" style={{ color: 'var(--text-primary)' }}>
+                {project.data.title}
+              </h3>
+              <p class="text-sm leading-relaxed flex-grow mb-6" style={{ color: 'var(--text-muted)' }}>
+                {project.data.subtitle}
+              </p>
+
+              <!-- Tech tags -->
+              <div class="flex flex-wrap gap-2 pt-4" style={{ borderTop: '1px solid var(--border-color)' }}>
+                {project.data.tags.slice(0, 5).map(tag => (
+                  <span
+                    class="px-2.5 py-0.5 rounded text-[11px] font-mono"
+                    style={{
+                      background: 'var(--color-accent-soft)',
+                      color: 'var(--color-accent)',
+                      border: '1px solid var(--color-accent-border)',
+                    }}
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <!-- CTA Footer -->
+            <div class="px-6 pb-6 flex items-center gap-2 text-sm font-semibold" style={{ color: 'var(--color-accent)' }}>
+              Explore Case Study
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:translate-x-1 transition-transform"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </div>
+          </a>
+        ))}
+      </div>
+
+      <!-- Secondary Projects -->
+      <div class="grid sm:grid-cols-2 gap-4">
+        {others.map((project, idx) => (
+          <a
+            href={`/projects/${project.id}`}
+            class="group relative rounded-xl p-5 flex flex-col gap-3 transition-all duration-300"
+            style={{
+              background: 'var(--bg-card)',
+              border: '1px solid var(--border-color)',
+              backdropFilter: 'blur(10px)',
+              textDecoration: 'none',
+              boxShadow: 'var(--card-shadow)',
+            }}
+          >
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] font-mono font-bold" style={{ color: 'var(--color-accent)' }}>
+                0{featured.length + idx + 1} · {project.data.category}
+              </span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style={{ color: 'var(--color-accent)' }} class="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+            </div>
+            <h3 class="text-base font-semibold group-hover:text-[var(--color-accent)] transition-colors" style={{ color: 'var(--text-primary)' }}>
+              {project.data.title}
+            </h3>
+            <p class="text-xs leading-relaxed" style={{ color: 'var(--text-muted)' }}>
+              {project.data.subtitle}
+            </p>
+            <div class="flex flex-wrap gap-1.5 mt-1">
+              {project.data.tags.slice(0, 4).map(tag => (
+                <span
+                  class="px-2 py-0.5 rounded text-[10px] font-mono"
+                  style={{
+                    background: 'var(--color-accent-soft)',
+                    color: 'var(--color-accent)',
+                    border: '1px solid var(--color-accent-border)',
+                  }}
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════ -->
+  <!-- 02. ENGINEERING CAPABILITIES                                        -->
+  <!-- ═══════════════════════════════════════════════════════════════════ -->
+  <section id="capabilities" class="py-24 px-5 sm:px-8 md:px-10 lg:px-16 transition-colors duration-300" style="background: var(--bg-panel); border-top: 1px solid var(--border-color);">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex items-center gap-3 mb-3">
+        <div class="section-line"></div>
+        <span class="text-[11px] tracking-[0.16em] uppercase font-mono font-semibold" style="color: var(--color-accent);">Core Competencies</span>
+      </div>
+      <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-12" style="color: var(--text-primary);">
+        Engineering <span style="color: var(--color-accent);">Domains</span>
+      </h2>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+        {skillCategories.map(cat => (
+          <div
+            class="rounded-xl p-5 flex flex-col gap-4 transition-all duration-300"
+            style={{
+              background: 'var(--bg-card)',
+              border: '1px solid var(--border-card)',
+              boxShadow: 'var(--card-shadow)',
+              backdropFilter: 'blur(12px)',
+            }}
+          >
+            <div class="text-[11px] font-mono tracking-wider uppercase font-bold pb-2.5" style="color: var(--color-accent); border-bottom: 1px solid var(--border-color);">
+              {cat.domain}
+            </div>
+            <div class="flex flex-col gap-3.5 flex-grow">
+              {cat.skills.map(skill => (
+                <div>
+                  <div class="text-xs font-semibold mb-0.5" style="color: var(--text-primary);">
+                    {skill.name}
+                  </div>
+                  <div class="text-[11px] leading-relaxed" style="color: var(--text-muted);">
+                    {skill.context}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════ -->
+  <!-- 03. AI SYSTEM ARCHITECTURE                                         -->
+  <!-- ═══════════════════════════════════════════════════════════════════ -->
+  <section id="architecture" class="py-24 px-5 sm:px-8 md:px-10 lg:px-16 transition-colors duration-300" style="background: var(--bg-color); border-top: 1px solid var(--border-color);">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex items-center gap-3 mb-3">
+        <div class="section-line"></div>
+        <span class="text-[11px] tracking-[0.16em] uppercase font-mono font-semibold" style="color: var(--color-accent);">Technical Rigor</span>
+      </div>
+      <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-4" style="color: var(--text-primary);">
+        System <span style="color: var(--color-accent);">Architecture</span>
+      </h2>
+      <p class="text-sm mb-12 max-w-xl leading-relaxed" style="color: var(--text-muted);">
+        Production AI systems demand deliberate architecture. Below is the multi-plane blueprint bridging client input, orchestration, autonomous agents, vector stores, and reasoning models.
+      </p>
+
+      <ArchitectureVisualizer client:visible />
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════ -->
+  <!-- 04. EXPERIENCE & CERTIFICATIONS                                     -->
+  <!-- ═══════════════════════════════════════════════════════════════════ -->
+  <section id="experience" class="py-24 px-5 sm:px-8 md:px-10 lg:px-16 transition-colors duration-300" style="background: var(--bg-panel); border-top: 1px solid var(--border-color);">
+    <div class="max-w-6xl mx-auto grid lg:grid-cols-12 gap-12 items-start">
+      
+      <!-- Experience Column -->
+      <div class="lg:col-span-7">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="section-line"></div>
+          <span class="text-[11px] tracking-[0.16em] uppercase font-mono font-semibold" style="color: var(--color-accent);">Track Record</span>
+        </div>
+        <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-12" style="color: var(--text-primary);">
+          Experience
+        </h2>
+
+        <div class="relative pl-6 border-l flex flex-col gap-10" style="border-color: var(--color-accent-border);">
+          {experiences.map(exp => (
+            <div class="relative">
+              <!-- Dot -->
+              <div
+                class="absolute -left-[31px] w-3.5 h-3.5 rounded-full border-2"
+                style={{
+                  background: 'var(--bg-color)',
+                  borderColor: 'var(--color-accent)',
+                  top: '4px',
+                }}
+              />
+              <div class="flex flex-wrap items-baseline justify-between gap-2 mb-1.5">
+                <h3 class="text-base md:text-lg font-bold" style={{ color: 'var(--text-primary)' }}>
+                  {exp.role}
+                </h3>
+                <span class="text-xs font-mono" style={{ color: 'var(--text-dim)' }}>
+                  {exp.date}
+                </span>
+              </div>
+              <div class="text-sm font-semibold mb-3" style={{ color: 'var(--color-accent)' }}>
+                {exp.company}
+              </div>
+              <ul class="flex flex-col gap-2 m-0 p-0 list-none">
+                {exp.bullets.map(bullet => (
+                  <li class="flex items-start gap-2.5 text-xs leading-relaxed" style={{ color: 'var(--text-muted)' }}>
+                    <span style={{ color: 'var(--color-accent)' }}>→</span>
+                    <span>{bullet}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Certifications Column -->
+      <div class="lg:col-span-5">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="section-line"></div>
+          <span class="text-[11px] tracking-[0.16em] uppercase font-mono font-semibold" style="color: var(--color-accent);">Verified Credentials</span>
+        </div>
+        <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-12" style="color: var(--text-primary);">
+          Certifications
+        </h2>
+
+        <div class="flex flex-col gap-4">
+          {certificationsList.map(cert => (
+            <div
+              class="p-4 rounded-xl border flex items-center justify-between gap-3 transition-colors"
+              style={{
+                background: 'var(--bg-card)',
+                borderColor: 'var(--border-card)',
+                boxShadow: 'var(--card-shadow)',
+              }}
+            >
+              <div>
+                <h4 class="text-sm font-bold" style={{ color: 'var(--text-primary)' }}>
+                  {cert.title}
+                </h4>
+                <div class="flex items-center gap-2 mt-1">
+                  <span class="text-xs font-mono" style={{ color: 'var(--color-accent)' }}>
+                    {cert.issuer}
+                  </span>
+                  {cert.date && (
+                    <span class="text-xs font-mono" style={{ color: 'var(--text-dim)' }}>
+                      · {cert.date}
+                    </span>
+                  )}
+                </div>
+              </div>
+              <span
+                class="px-2 py-0.5 rounded text-[10px] font-mono font-semibold"
+                style={{
+                  background: 'var(--color-accent-soft)',
+                  color: 'var(--color-accent)',
+                  border: '1px solid var(--color-accent-border)',
+                }}
+              >
+                Verified
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════ -->
+  <!-- 05. AI LAB                                                          -->
+  <!-- ═══════════════════════════════════════════════════════════════════ -->
+  <section id="lab" class="py-24 px-5 sm:px-8 md:px-10 lg:px-16 transition-colors duration-300" style="background: var(--bg-color); border-top: 1px solid var(--border-color);">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex items-center gap-3 mb-3">
+        <div class="section-line"></div>
+        <span class="text-[11px] tracking-[0.16em] uppercase font-mono font-semibold" style="color: var(--color-accent);">Research & Benchmarks</span>
+      </div>
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+        <div>
+          <h2 class="text-3xl md:text-4xl font-bold tracking-tight" style="color: var(--text-primary);">
+            AI <span style="color: var(--color-accent);">Lab</span>
+          </h2>
+          <p class="text-sm mt-3 max-w-lg leading-relaxed" style="color: var(--text-muted);">
+            Applied research explorations and functional prototypes across semantic retrieval, agentic workflows, and edge inference.
+          </p>
+        </div>
+        <a
+          href="/lab"
+          class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-semibold flex-shrink-0"
+          style={{
+            border: '1px solid var(--color-accent-border)',
+            color: 'var(--color-accent)',
+            background: 'var(--color-accent-soft)',
+            textDecoration: 'none',
+          }}
+        >
+          Open AI Lab →
+        </a>
+      </div>
+
+      <div class="grid sm:grid-cols-3 gap-4">
+        {[
+          { title: 'RAG Q&A Demo', desc: 'Ask natural-language questions about my background. Real semantic retrieval + LLM synthesis.', label: 'Prototype', href: '/lab' },
+          { title: 'Architecture Visualizer', desc: 'Interactive breakdown of multi-agent and enterprise RAG pipelines.', label: 'Interactive', href: '#architecture' },
+          { title: 'CV Defect Detection', desc: 'Real-time YOLOv8 industrial quality control and OCR label validation.', label: 'Case Study', href: `/projects/etic-label-inspection` },
+        ].map(item => (
+          <a
+            href={item.href}
+            class="group rounded-xl p-5 flex flex-col gap-3 transition-all duration-300"
+            style={{
+              background: 'var(--bg-card)',
+              border: '1px solid var(--border-color)',
+              boxShadow: 'var(--card-shadow)',
+              backdropFilter: 'blur(10px)',
+              textDecoration: 'none',
+            }}
+          >
+            <div class="flex items-center justify-between">
+              <span
+                class="text-[10px] font-mono px-2 py-0.5 rounded font-semibold"
+                style={{
+                  background: 'var(--color-accent-soft)',
+                  color: 'var(--color-accent)',
+                  border: '1px solid var(--color-accent-border)',
+                }}
+              >
+                {item.label}
+              </span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style={{ color: 'var(--color-accent)' }} class="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+            </div>
+            <h3 class="text-sm font-semibold group-hover:text-[var(--color-accent)] transition-colors" style={{ color: 'var(--text-primary)' }}>
+              {item.title}
+            </h3>
+            <p class="text-xs leading-relaxed" style={{ color: 'var(--text-muted)' }}>
+              {item.desc}
+            </p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════ -->
+  <!-- 06. CONTACT / CTA                                                   -->
+  <!-- ═══════════════════════════════════════════════════════════════════ -->
+  <section id="contact" class="py-28 px-5 sm:px-8 md:px-10 lg:px-16 text-center transition-colors duration-300" style="background: var(--bg-panel); border-top: 1px solid var(--border-color);">
+    <div class="max-w-3xl mx-auto">
+      <div class="flex items-center justify-center gap-3 mb-6">
+        <div class="section-line"></div>
+        <span class="text-[11px] tracking-[0.16em] uppercase font-mono font-semibold" style="color: var(--color-accent);">Open to Opportunities</span>
+        <div class="section-line"></div>
+      </div>
+
+      <h2 class="text-3xl md:text-5xl font-bold tracking-tight mb-5 leading-tight" style="color: var(--text-primary);">
+        Let's build something<br/>
+        <span style="color: var(--color-accent);">intelligent.</span>
+      </h2>
+
+      <p class="text-sm md:text-base mb-10 max-w-xl mx-auto leading-relaxed" style="color: var(--text-muted);">
+        Available for AI Engineering, Machine Learning and Software Engineering opportunities.
+      </p>
+
+      <div class="flex flex-wrap items-center justify-center gap-3">
+        <a
+          href="/contact"
+          class="inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-sm transition-transform"
+          style={{
+            background: 'var(--btn-primary-bg)',
+            color: 'var(--btn-primary-text)',
+            textDecoration: 'none',
+            boxShadow: 'var(--card-shadow)',
+          }}
+          onmouseover="this.style.transform='translateY(-1px)'"
+          onmouseout="this.style.transform='translateY(0)'"
+        >
+          Contact Me
+        </a>
+        <a
+          href="https://linkedin.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 px-6 py-3 rounded-full font-medium text-sm transition-colors"
+          style={{
+            border: '1px solid var(--border-color)',
+            color: 'var(--text-primary)',
+            background: 'var(--bg-card)',
+            textDecoration: 'none',
+          }}
+        >
+          LinkedIn
+        </a>
+        <a
+          href="https://github.com/Mohamed-abidi-95"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 px-6 py-3 rounded-full font-medium text-sm transition-colors"
+          style={{
+            border: '1px solid var(--border-color)',
+            color: 'var(--text-primary)',
+            background: 'var(--bg-card)',
+            textDecoration: 'none',
+          }}
+        >
+          GitHub
+        </a>
+        <a
+          href="/cv/mohamed-abidi-cv.pdf"
+          download="Mohamed-Abidi-CV.pdf"
+          class="inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-sm transition-colors"
+          style={{
+            border: '1px solid var(--color-accent-border)',
+            color: 'var(--color-accent)',
+            background: 'var(--color-accent-soft)',
+            textDecoration: 'none',
+          }}
+        >
+          Download CV
+        </a>
+      </div>
+    </div>
+  </section>
+
+</HomeLayout>

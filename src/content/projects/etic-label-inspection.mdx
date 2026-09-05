@@ -1,0 +1,57 @@
+---
+title: "ETIC Label Inspection"
+subtitle: "Industrial Quality Inspection using Computer Vision"
+tags: ["C#", ".NET", "OpenCvSharp", "YOLOv8", "ONNX", "SQL Server"]
+category: "Computer Vision"
+context: "ETIC Europe (2025 - 2026)"
+date: "2025-12-01"
+featured: true
+---
+
+## Problem
+Manual inspection of industrial labels is slow and prone to errors. A robust automated system was needed to perform real-time defect detection, read text via OCR, and validate physical measurements accurately.
+
+## Context
+Developed as an AI & Computer Vision Developer at ETIC Europe. The project required integrating software with physical industrial cameras and ensuring high reliability in a production environment.
+
+## Architecture
+- **Hardware Integration**: Camera acquisition module.
+- **Preprocessing**: OpenCV pipeline for image enhancement and calibration.
+- **Inference Engine**: YOLOv8 via ONNX Runtime for object detection.
+- **Validation Logic**: Measurement and OCR verification.
+- **Data Persistence**: SQL Server for logging inspection results.
+
+## Technology
+| Technology | Role |
+|---|---|
+| C# & .NET | Core application logic and hardware integration |
+| OpenCvSharp | Image preprocessing and pixel-to-mm calibration |
+| YOLOv8 & ONNX Runtime | Real-time object and defect detection |
+| OCR | Text extraction from labels |
+| SQL Server | Storing validation results and production metrics |
+
+## AI Pipeline
+1. **Acquisition**: Image captured from industrial camera.
+2. **Preprocessing**: Image distortion correction and contrast enhancement using OpenCvSharp.
+3. **Inference**: YOLOv8 (ONNX) detects label boundaries and potential defects.
+4. **OCR**: Text is extracted from specific regions of interest.
+5. **Calibration**: Pixel measurements are converted to physical dimensions (mm).
+6. **Validation**: Results are compared against expected specifications.
+7. **Persistence**: Final decision (Pass/Fail) logged to SQL Server.
+
+## Engineering
+The system was engineered for low-latency inference using ONNX Runtime. The C# application architecture separated the hardware acquisition, inference, and UI layers, ensuring that camera frame rates were not blocked by AI processing.
+
+## Challenges
+1. **Calibration (Pixel to mm)**: Ensuring accurate physical measurements from camera images, dealing with lens distortion and varying lighting conditions.
+2. **Real-time Performance**: Running complex YOLO inference and OCR within the cycle time constraints of the production line.
+
+## Solutions
+1. Implemented a robust camera calibration routine using checkerboard patterns to map pixels to precise millimeter measurements.
+2. Optimized the inference pipeline by exporting models to ONNX and utilizing hardware acceleration where available, ensuring the software met the latency requirements.
+
+## Results
+The solution was successfully integrated into the QA pipeline at ETIC Europe, significantly reducing the manual inspection workload and increasing defect detection reliability.
+
+## What I learned
+Deploying Computer Vision in an industrial setting is vastly different from academic projects. Dealing with physical constraints like lighting variations, camera calibration, and strict latency requirements was a major learning experience.
