@@ -115,6 +115,8 @@ export function HeroSection() {
         muted
         playsInline
         preload="auto"
+        autoPlay
+        loop
       />
 
       {/* ── Art-directed Overlays for Dark / Light Mode ── */}
