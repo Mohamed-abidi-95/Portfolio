@@ -1,0 +1,77 @@
+---
+/**
+ * Visual for a project: the real screenshot when there is one,
+ * otherwise a hand-drawn illustration with a visible "Illustration" tag.
+ */
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import ProjectArt from './ProjectArt.astro';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+  /** Browser-window chrome around the visual. */
+  framed?: boolean;
+  sizes?: string;
+  eager?: boolean;
+  class?: string;
+}
+
+const { project, framed = true, sizes = '(min-width: 1024px) 33vw, 100vw', eager = false, class: className } = Astro.props;
+const d = project.data;
+---
+
+<figure class:list={["media", framed && "framed", className]}>
+  {framed && (
+    <div class="chrome" aria-hidden="true">
+      <span></span><span></span><span></span>
+      <em>{d.cover ? 'Screenshot' : 'Illustration'}</em>
+    </div>
+  )}
+  <div class="viewport">
+    {d.cover ? (
+      <Image
+        src={d.cover}
+        alt={d.coverAlt ?? `${d.title} screenshot`}
+        widths={[480, 800, 1200, 1600]}
+        sizes={sizes}
+        loading={eager ? 'eager' : 'lazy'}
+        class="shot"
+      />
+    ) : (
+      <ProjectArt id={project.id} />
+    )}
+  </div>
+</figure>
+
+<style>
+  .media { margin: 0; position: relative; }
+  .framed {
+    border-radius: 18px; overflow: hidden;
+    border: 1px solid var(--line-strong);
+    background: var(--surface-strong);
+    box-shadow: 0 24px 50px -30px color-mix(in oklab, var(--acc, var(--violet)) 70%, transparent);
+  }
+  .chrome {
+    display: flex; align-items: center; gap: 6px;
+    height: 30px; padding: 0 12px;
+    background: color-mix(in oklab, var(--ink) 5%, var(--surface-strong));
+    border-bottom: 1px solid var(--line);
+  }
+  .chrome span { width: 9px; height: 9px; border-radius: 50%; background: var(--line-strong); }
+  .chrome span:nth-child(1) { background: #FF5F57; }
+  .chrome span:nth-child(2) { background: #FEBC2E; }
+  .chrome span:nth-child(3) { background: #28C840; }
+  .chrome em {
+    margin-left: auto; font-style: normal;
+    font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--dim);
+  }
+  .viewport { aspect-ratio: 16 / 10; overflow: hidden; background: var(--bg-elev); }
+  .viewport :global(.shot) {
+    width: 100%; height: 100%; object-fit: cover; object-position: top left;
+    transition: transform .8s cubic-bezier(.16,1,.3,1);
+  }
+  :global(.group:hover) .viewport :global(.shot),
+  :global(.group:hover) .viewport :global(.art) { transform: scale(1.04); }
+  .viewport :global(.art) { transition: transform .8s cubic-bezier(.16,1,.3,1); }
+</style>

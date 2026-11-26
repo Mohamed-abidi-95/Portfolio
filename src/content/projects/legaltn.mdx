@@ -1,6 +1,6 @@
 ---
 title: "LegalTN"
-subtitle: "Bilingual Arabic / French legal search over the Tunisian Labor Code — no LLM"
+subtitle: "Bilingual Arabic / French legal search over the Tunisian Labor Code — BM25 core, no LLM needed"
 tags: ["BM25", "OCR", "Arabizi", "Arabic normalization", "SymSpell", "CRF NER", "pytest"]
 category: "NLP"
 context: "ESPRIM NLP project"
@@ -10,6 +10,18 @@ metrics:
   - { value: "~500", label: "articles per language" }
   - { value: "291", label: "PDF pages processed with OCR" }
   - { value: "79", label: "automated tests" }
+cover: "../../assets/projects/legaltn/search.png"
+coverAlt: "LegalTN search screen: a French question about the notice period of a permanent contract, with the matching articles of the Labor Code highlighted"
+gallery:
+  - src: "../../assets/projects/legaltn/abstention.png"
+    alt: "LegalTN refusing an off-topic question"
+    caption: "Abstention: an off-topic question (\"What is the capital of Tunisia?\") gets no article instead of a wrong one."
+  - src: "../../assets/projects/legaltn/arabic.png"
+    alt: "French article shown with its aligned Arabic version"
+    caption: "Automatic AR/FR alignment: each French article opens its Arabic version."
+  - src: "../../assets/projects/legaltn/rag-answer.png"
+    alt: "Optional drafted answer with the cited article below"
+    caption: "Optional mode: a local model (Qwen 2.5 3B) drafts an answer only from the cited articles."
 order: 3
 featured: true
 ---
@@ -22,7 +34,8 @@ Workers and HR staff in Tunisia ask legal questions in **French, Arabic, Tunisia
 - **Automatic AR/FR alignment** so each Arabic article is linked to its French version.
 
 ## Search engine
-- **BM25** retrieval with **abstention** and **source citation**: no LLM, so no invented answers.
+- **BM25** retrieval with **abstention** and **source citation**: the search itself needs no LLM, so it cannot invent an answer.
+- An optional mode lets a local model draft a short answer, using only the cited articles.
 - Questions accepted in French, Arabic, Tunisian dialect or Arabizi.
 
 ## Multilingual preprocessing

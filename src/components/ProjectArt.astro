@@ -1,0 +1,164 @@
+---
+/**
+ * Hand-drawn SVG illustrations for projects that have no screenshot yet.
+ * They are labelled "Illustration" wherever they appear — never presented as real captures.
+ * Colours come from CSS variables, so they follow the light / dark theme.
+ */
+interface Props { id: string; class?: string }
+const { id, class: className } = Astro.props;
+---
+
+<svg viewBox="0 0 640 360" class:list={["art", className]} role="img" aria-label={`Illustration for ${id}`} preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id={`bg-${id}`} x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" style="stop-color: var(--acc); stop-opacity: .22" />
+      <stop offset="1" style="stop-color: var(--pink); stop-opacity: .10" />
+    </linearGradient>
+  </defs>
+  <rect width="640" height="360" fill={`url(#bg-${id})`} />
+  <g class="dots">{Array.from({ length: 12 }).map((_, i) => <circle cx={40 + i * 52} cy="22" r="1.6" />)}</g>
+
+  {id === 'researchmind' && (
+    <g>
+      <!-- video frame -->
+      <rect x="40" y="48" width="330" height="190" rx="16" class="panel" />
+      <polygon points="190,118 190,170 232,144" class="acc-fill" />
+      <!-- waveform -->
+      {Array.from({ length: 38 }).map((_, i) => {
+        const h = 6 + Math.abs(Math.sin(i * 1.7) * 26) + (i % 5) * 2;
+        return <rect x={52 + i * 8.2} y={262 - h / 2} width="4" height={h} rx="2" class={i > 14 && i < 22 ? 'acc-fill' : 'muted-fill'} />;
+      })}
+      <!-- timeline chips -->
+      <rect x="52" y="296" width="78" height="26" rx="13" class="chip-bg" /><text x="91" y="314" class="mono" text-anchor="middle">00:01:08</text>
+      <rect x="140" y="296" width="78" height="26" rx="13" class="acc-chip" /><text x="179" y="314" class="mono acc-text" text-anchor="middle">00:04:12</text>
+      <rect x="228" y="296" width="78" height="26" rx="13" class="chip-bg" /><text x="267" y="314" class="mono" text-anchor="middle">00:07:40</text>
+      <!-- answer card -->
+      <rect x="396" y="64" width="208" height="232" rx="18" class="panel" />
+      <text x="416" y="96" class="label">Answer</text>
+      <rect x="416" y="112" width="168" height="8" rx="4" class="line" />
+      <rect x="416" y="130" width="150" height="8" rx="4" class="line" />
+      <rect x="416" y="148" width="160" height="8" rx="4" class="line" />
+      <rect x="416" y="176" width="110" height="24" rx="12" class="acc-chip" /><text x="471" y="193" class="mono acc-text" text-anchor="middle">cited 00:04:12</text>
+      <text x="416" y="236" class="label">R@3 0.95 · MRR 0.85</text>
+      <rect x="416" y="252" width="168" height="6" rx="3" class="line" /><rect x="416" y="252" width="160" height="6" rx="3" class="acc-fill" />
+    </g>
+  )}
+
+  {id === 'ai-grc' && (
+    <g>
+      <rect x="40" y="48" width="160" height="272" rx="16" class="panel" />
+      {['Risks', 'Policies', 'Frameworks', 'Evidence', 'Audits', 'Dashboard'].map((t, i) => (
+        <g>
+          <rect x="56" y={70 + i * 40} width="128" height="28" rx="10" class={i === 5 ? 'acc-chip' : 'chip-bg'} />
+          <text x="70" y={89 + i * 40} class={i === 5 ? 'small acc-text' : 'small'}>{t}</text>
+        </g>
+      ))}
+      <rect x="216" y="48" width="384" height="128" rx="16" class="panel" />
+      <circle cx="290" cy="112" r="40" class="ring" />
+      <circle cx="290" cy="112" r="40" class="ring-acc" stroke-dasharray="180 252" transform="rotate(-90 290 112)" />
+      <text x="290" y="118" class="label" text-anchor="middle">rate</text>
+      {[54, 82, 38, 70, 60, 90, 46].map((h, i) => <rect x={360 + i * 32} y={156 - h} width="18" height={h} rx="5" class={i === 5 ? 'acc-fill' : 'muted-fill'} />)}
+      <rect x="216" y="192" width="384" height="128" rx="16" class="panel" />
+      {[['ISO 27001 · A.5.1', 'acc'], ['ISO 27001 · A.8.2', 'ok'], ['ISO 9001 · 7.5', 'gap']].map(([t, s], i) => (
+        <g>
+          <text x="236" y={228 + i * 34} class="small">{t}</text>
+          <rect x="500" y={213 + i * 34} width="80" height="22" rx="11" class={s === 'gap' ? 'pink-chip' : 'acc-chip'} />
+          <text x="540" y={228 + i * 34} class={s === 'gap' ? 'mono pink-text' : 'mono acc-text'} text-anchor="middle">{s === 'gap' ? 'gap' : 'mapped'}</text>
+        </g>
+      ))}
+    </g>
+  )}
+
+  {id === 'etic-label-inspection' && (
+    <g>
+      <rect x="120" y="56" width="400" height="248" rx="18" class="panel" transform="rotate(-4 320 180)" />
+      <g transform="rotate(-4 320 180)">
+        <rect x="150" y="84" width="220" height="16" rx="5" class="line" />
+        <rect x="150" y="112" width="180" height="12" rx="5" class="line" />
+        <rect x="150" y="134" width="200" height="12" rx="5" class="line" />
+        <rect x="140" y="74" width="240" height="80" rx="8" class="det" />
+        <text x="146" y="70" class="mono acc-text">EAST · text</text>
+        <g>{Array.from({ length: 36 }).map((_, i) => ((i * 7) % 5 < 3 ? <rect x={404 + (i % 6) * 14} y={92 + Math.floor(i / 6) * 14} width="12" height="12" class="ink-fill" /> : null))}</g>
+        <rect x="396" y="84" width="100" height="100" rx="8" class="det-pink" />
+        <text x="398" y="80" class="mono pink-text">QR</text>
+        <rect x="150" y="190" width="150" height="40" rx="6" class="line" />
+        <rect x="142" y="182" width="166" height="56" rx="8" class="det" />
+        <text x="148" y="254" class="mono acc-text">OCR · Tesseract ✓</text>
+        <line x1="120" y1="276" x2="520" y2="276" class="ruler" />
+        {Array.from({ length: 21 }).map((_, i) => <line x1={120 + i * 20} y1="270" x2={120 + i * 20} y2={i % 5 === 0 ? 288 : 282} class="ruler" />)}
+      </g>
+    </g>
+  )}
+
+  {id === 'auticonnect' && (
+    <g>
+      <rect x="150" y="40" width="340" height="290" rx="24" class="panel" />
+      <rect x="170" y="70" width="210" height="52" rx="18" class="chip-bg" />
+      <rect x="186" y="86" width="150" height="8" rx="4" class="line" /><rect x="186" y="102" width="110" height="8" rx="4" class="line" />
+      <rect x="260" y="138" width="210" height="52" rx="18" class="acc-fill" opacity=".9" />
+      <text x="452" y="170" class="label on-acc" text-anchor="end">مرحبا · Bonjour</text>
+      <rect x="170" y="206" width="250" height="70" rx="18" class="chip-bg" />
+      <text x="186" y="232" class="mono acc-text">{'{ "intent": "…",'}</text>
+      <text x="186" y="254" class="mono acc-text">{'  "valid": true }'}</text>
+      <rect x="170" y="290" width="300" height="26" rx="13" class="line" />
+      <text x="190" y="308" class="small">Gemini · function calling</text>
+    </g>
+  )}
+
+  {id === 'omnutrition' && (
+    <g>
+      <rect x="40" y="48" width="270" height="272" rx="16" class="panel" />
+      {Array.from({ length: 36 }).map((_, i) => {
+        const v = (Math.sin(i * 2.3) + 1) / 2;
+        return <rect x={62 + (i % 6) * 38} y={70 + Math.floor(i / 6) * 38} width="32" height="32" rx="6" class="acc-fill" opacity={0.15 + v * 0.8} />;
+      })}
+      <rect x="330" y="48" width="270" height="272" rx="16" class="panel" />
+      {Array.from({ length: 40 }).map((_, i) => <circle cx={356 + ((i * 53) % 220)} cy={290 - (((i * 37) % 200) * 0.9 + (i % 7) * 6)} r="5" class={i % 6 === 0 ? 'pink-fill' : 'acc-fill'} opacity=".75" />)}
+      <line x1="350" y1="296" x2="584" y2="96" class="trend" />
+    </g>
+  )}
+
+  {id === 'cyberhunter' && (
+    <g>
+      <rect x="40" y="48" width="300" height="272" rx="16" class="panel" />
+      {Array.from({ length: 9 }).map((_, i) => (
+        <g>
+          <rect x="58" y={70 + i * 27} width={60} height="10" rx="5" class="muted-fill" />
+          <rect x="128" y={70 + i * 27} width={90 + ((i * 37) % 90)} height="10" rx="5" class={i === 3 || i === 6 ? 'pink-fill' : 'line'} />
+        </g>
+      ))}
+      <rect x="356" y="48" width="244" height="272" rx="16" class="panel" />
+      <text x="376" y="80" class="label">MITRE ATT&amp;CK</text>
+      {Array.from({ length: 30 }).map((_, i) => (
+        <rect x={376 + (i % 5) * 42} y={96 + Math.floor(i / 5) * 34} width="36" height="26" rx="5" class={[3, 8, 14, 21, 27].includes(i) ? 'pink-fill' : [6, 17].includes(i) ? 'acc-fill' : 'chip-bg'} />
+      ))}
+    </g>
+  )}
+</svg>
+
+<style>
+  .art { display: block; width: 100%; height: 100%; }
+  .art .dots circle { fill: var(--line-strong); }
+  .art .panel { fill: var(--surface-strong); stroke: var(--line); }
+  .art .line { fill: color-mix(in oklab, var(--ink) 14%, transparent); }
+  .art .muted-fill { fill: color-mix(in oklab, var(--ink) 22%, transparent); }
+  .art .ink-fill { fill: var(--ink); }
+  .art .acc-fill { fill: var(--acc); }
+  .art .pink-fill { fill: var(--pink); }
+  .art .chip-bg { fill: color-mix(in oklab, var(--ink) 7%, transparent); }
+  .art .acc-chip { fill: color-mix(in oklab, var(--acc) 18%, transparent); stroke: color-mix(in oklab, var(--acc) 55%, transparent); }
+  .art .pink-chip { fill: color-mix(in oklab, var(--pink) 16%, transparent); stroke: color-mix(in oklab, var(--pink) 55%, transparent); }
+  .art .ring { fill: none; stroke: color-mix(in oklab, var(--ink) 10%, transparent); stroke-width: 14; }
+  .art .ring-acc { fill: none; stroke: var(--acc); stroke-width: 14; stroke-linecap: round; }
+  .art .det { fill: none; stroke: var(--acc); stroke-width: 3; stroke-dasharray: 8 6; }
+  .art .det-pink { fill: none; stroke: var(--pink); stroke-width: 3; stroke-dasharray: 8 6; }
+  .art .ruler { stroke: var(--muted); stroke-width: 1.5; }
+  .art .trend { stroke: var(--pink); stroke-width: 3; stroke-dasharray: 6 6; }
+  .art text { font-family: var(--font-sans); fill: var(--ink); }
+  .art .label { font-size: 15px; font-weight: 700; }
+  .art .small { font-size: 13px; font-weight: 600; fill: var(--muted); }
+  .art .mono { font-family: var(--font-mono); font-size: 12px; fill: var(--muted); }
+  .art .acc-text { fill: var(--acc); }
+  .art .pink-text { fill: var(--pink); }
+  .art .on-acc { fill: #fff; }
+</style>

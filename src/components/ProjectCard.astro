@@ -1,6 +1,7 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { categoryAccent } from '../lib/accent';
+import ProjectMedia from './ProjectMedia.astro';
 
 interface Props {
   project: CollectionEntry<'projects'>;
@@ -33,7 +34,13 @@ const tags = d.tags.slice(0, big ? 7 : 4);
     </span>
   </div>
 
-  <div class:list={["mt-6", big && "md:mt-10"]}>
+  <ProjectMedia
+    project={project}
+    class:list={["mt-5", big && "md:mt-7"]}
+    sizes={big ? '(min-width: 1024px) 760px, 100vw' : '(min-width: 1024px) 380px, (min-width: 768px) 50vw, 100vw'}
+  />
+
+  <div class:list={["mt-6", big && "md:mt-8"]}>
     {index !== undefined && (
       <p class="font-mono text-[12px] mb-2" style="color: var(--dim);">{String(index).padStart(2, '0')} — {d.period}</p>
     )}

@@ -18,27 +18,27 @@ const {
 ---
 
 <!doctype html>
-<html lang="en" class="dark">
+<html lang="en" class="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#07060D" />
+    <meta name="theme-color" content="#FAF7F2" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
 
-    <!-- Theme (dark by default, remembers the visitor's choice) + JS flag for reveal animations -->
+    <!-- Theme (light by default, remembers the visitor's choice) + JS flag for reveal animations -->
     <script is:inline>
       (function () {
         var root = document.documentElement;
         root.classList.add('js');
         var saved = null;
         try { saved = localStorage.getItem('theme'); } catch (e) {}
-        if (saved === 'light') { root.classList.remove('dark'); root.classList.add('light'); }
-        else { root.classList.add('dark'); root.classList.remove('light'); }
+        if (saved === 'dark') { root.classList.add('dark'); root.classList.remove('light'); }
+        else { root.classList.remove('dark'); root.classList.add('light'); }
       })();
     </script>
 
