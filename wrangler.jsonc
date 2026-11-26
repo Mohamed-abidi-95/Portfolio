@@ -1,4 +1,4 @@
-﻿{
+{
   // Cloudflare Workers config: serve the static Astro build output.
   // "name" must match the Worker created in the Cloudflare dashboard.
   "name": "me",
