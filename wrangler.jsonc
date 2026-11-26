@@ -1,0 +1,10 @@
+{
+  // Cloudflare Workers config: serve the static Astro build output.
+  // "name" must match the Worker created in the Cloudflare dashboard.
+  "name": "portfolio",
+  "compatibility_date": "2026-11-23",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  }
+}
