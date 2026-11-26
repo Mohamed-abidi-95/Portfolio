@@ -1,116 +1,136 @@
 ---
-import { ThemeToggle } from "./ThemeToggle";
+import ThemeToggle from './ThemeToggle.astro';
+import { person } from '../data/profile';
 
 const navLinks = [
-  { label: 'Home', href: '/' },
-  { label: 'Projects', href: '/projects' },
+  { label: 'Work', href: '/projects' },
   { label: 'About', href: '/about' },
   { label: 'AI Lab', href: '/lab' },
   { label: 'Contact', href: '/contact' },
 ];
 
-const currentPath = Astro.url.pathname;
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isActive = (href: string) => path === href || path.startsWith(href + '/');
 ---
 
-<header
-  class="sticky top-0 z-50 w-full transition-colors duration-300"
-  style="background: var(--nav-bg); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid var(--nav-border);"
->
-  <div class="container mx-auto px-5 sm:px-8 h-14 flex items-center justify-between">
+<header class="fixed top-0 inset-x-0 z-50 px-3 sm:px-5 pt-3 sm:pt-4">
+  <div
+    class="nav-shell mx-auto max-w-[1160px] h-16 flex items-center justify-between gap-3 pl-5 pr-2.5 rounded-full"
+  >
     <!-- Logo -->
-    <a href="/" class="flex items-center gap-2" style="text-decoration: none;">
-      <span style="color: var(--text-primary); font-size: 16px; font-weight: 700; letter-spacing: -0.03em;">
-        Mohamed <span style="color: var(--color-accent);">ABIDI</span>
+    <a href="/" class="flex items-center gap-2.5 no-underline shrink-0" aria-label="Mohamed Abidi — home">
+      <span class="logo-mark" aria-hidden="true">MA</span>
+      <span class="font-display font-bold text-[17px] tracking-tight" style="color: var(--ink);">
+        Mohamed<span class="grad-text">.</span>
       </span>
     </a>
 
     <!-- Desktop nav -->
-    <nav class="hidden md:flex items-center gap-7">
-      {navLinks.map(link => {
-        const isActive = currentPath === link.href || (link.href !== '/' && currentPath.startsWith(link.href));
-        return (
-          <a
-            href={link.href}
-            class="text-sm transition-colors duration-200"
-            style={{
-              color: isActive ? 'var(--color-accent)' : 'var(--text-muted)',
-              textDecoration: 'none',
-              fontWeight: isActive ? '600' : '400',
-            }}
-          >
-            {link.label}
-          </a>
-        );
-      })}
+    <nav class="hidden md:flex items-center gap-1" aria-label="Main">
+      {navLinks.map(l => (
+        <a
+          href={l.href}
+          class:list={["nav-link", isActive(l.href) && "active"]}
+          aria-current={isActive(l.href) ? 'page' : undefined}
+        >
+          {l.label}
+        </a>
+      ))}
     </nav>
 
-    <!-- Right Controls: CTA + Theme Toggle + Mobile Menu -->
-    <div class="flex items-center gap-3">
-      <!-- Download CV -->
-      <a
-        href="/cv/mohamed-abidi-cv.pdf"
-        download="Mohamed-Abidi-CV.pdf"
-        class="hidden sm:inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-medium transition-colors"
-        style="border: 1px solid var(--color-accent-border); color: var(--color-accent); background: var(--color-accent-soft); text-decoration: none;"
-      >
+    <!-- Right controls -->
+    <div class="flex items-center gap-2">
+      <ThemeToggle />
+      <a href={person.cv} download="Mohamed-Abidi-CV.pdf" class="btn btn-grad hidden sm:inline-flex !min-h-[42px] !px-5 !text-[14px]">
         Download CV
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0 5-5m-5 5-5-5M5 21h14"/></svg>
       </a>
-
-      <!-- Theme Switcher -->
-      <ThemeToggle client:load />
-
-      <!-- Mobile hamburger -->
       <button
-        id="mobile-menu-btn"
-        class="md:hidden flex flex-col justify-center items-center gap-[5px] p-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] rounded"
+        id="menu-open"
+        class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-full cursor-pointer"
+        style="border: 1px solid var(--line-strong); background: var(--surface); color: var(--ink);"
         aria-label="Open menu"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
       >
-        <div class="w-5 h-[2px] rounded-full transition-colors" style="background: var(--text-primary);"></div>
-        <div class="w-5 h-[2px] rounded-full transition-colors" style="background: var(--text-primary);"></div>
-        <div class="w-5 h-[2px] rounded-full transition-colors" style="background: var(--text-primary);"></div>
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg>
       </button>
     </div>
   </div>
 </header>
 
-<!-- Mobile overlay -->
-<div
-  id="mobile-menu"
-  class="fixed inset-0 md:hidden flex flex-col justify-center px-8 gap-8 transition-opacity duration-300"
-  style="z-index: 60; background: var(--nav-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); opacity: 0; pointer-events: none;"
->
-  <button id="mobile-menu-close" class="absolute top-5 right-6 p-2 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]" aria-label="Close menu">
-    <div class="w-6 h-[2px] rotate-45 translate-y-[1px]" style="background: var(--text-primary);"></div>
-    <div class="w-6 h-[2px] -rotate-45 -translate-y-[1px]" style="background: var(--text-primary);"></div>
+<!-- Mobile menu -->
+<div id="mobile-menu" class="mobile-menu md:hidden" aria-hidden="true">
+  <div class="mesh" aria-hidden="true"><div class="blob b1"></div><div class="blob b2"></div></div>
+  <button id="menu-close" class="absolute top-6 right-5 w-11 h-11 rounded-full inline-flex items-center justify-center cursor-pointer" style="border: 1px solid var(--line-strong); background: var(--surface); color: var(--ink);" aria-label="Close menu">
+    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
   </button>
-  
-  {navLinks.map(link => (
-    <a href={link.href} class="text-2xl font-semibold" style="color: var(--text-primary); text-decoration: none;">
-      {link.label}
-    </a>
-  ))}
-  
-  <div class="pt-4 flex flex-col gap-4" style="border-top: 1px solid var(--border-color);">
-    <a href="/cv/mohamed-abidi-cv.pdf" download class="text-lg font-medium" style="color: var(--color-accent); text-decoration: none;">
-      Download CV ↓
-    </a>
-  </div>
+  <nav class="relative z-10 flex flex-col gap-2 px-7" aria-label="Mobile">
+    <a href="/" class="m-link">Home</a>
+    {navLinks.map(l => <a href={l.href} class="m-link">{l.label}</a>)}
+    <a href={person.cv} download="Mohamed-Abidi-CV.pdf" class="btn btn-grad mt-8 self-start">Download CV</a>
+  </nav>
 </div>
 
+<style>
+  .nav-shell {
+    background: var(--nav-bg);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    border: 1px solid var(--line);
+    box-shadow: 0 10px 40px -20px rgba(0,0,0,.5);
+  }
+  .logo-mark {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 34px; height: 34px; border-radius: 11px;
+    background: var(--grad);
+    color: #fff; font-family: var(--font-display); font-weight: 800; font-size: 13px; letter-spacing: -.02em;
+    box-shadow: 0 6px 20px -6px var(--pink);
+  }
+  .nav-link {
+    position: relative;
+    padding: 9px 16px; border-radius: 999px;
+    font-size: 14.5px; font-weight: 500;
+    color: var(--muted); text-decoration: none;
+    transition: color .2s, background .2s;
+  }
+  .nav-link:hover { color: var(--ink); background: color-mix(in oklab, var(--ink) 6%, transparent); }
+  .nav-link.active { color: var(--ink); background: color-mix(in oklab, var(--violet) 16%, transparent); }
+  .nav-link.active::after {
+    content: ""; position: absolute; left: 50%; bottom: 3px; width: 4px; height: 4px; border-radius: 50%;
+    transform: translateX(-50%); background: var(--pink);
+  }
+
+  .mobile-menu {
+    position: fixed; inset: 0; z-index: 70;
+    display: flex; flex-direction: column; justify-content: center;
+    background: var(--bg);
+    opacity: 0; pointer-events: none; transition: opacity .3s ease;
+    overflow: hidden;
+  }
+  .mobile-menu.open { opacity: 1; pointer-events: auto; }
+  .m-link {
+    font-family: var(--font-display); font-weight: 800; font-size: 44px; letter-spacing: -.04em;
+    color: var(--ink); text-decoration: none; line-height: 1.15;
+  }
+  .m-link:hover { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+</style>
+
 <script is:inline>
-  const btn = document.getElementById('mobile-menu-btn');
-  const closeBtn = document.getElementById('mobile-menu-close');
-  const menu = document.getElementById('mobile-menu');
-  const toggle = (open) => {
-    if (!menu) return;
-    menu.style.opacity = open ? '1' : '0';
-    menu.style.pointerEvents = open ? 'auto' : 'none';
-    if (open) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
+  (function () {
+    var menu = document.getElementById('mobile-menu');
+    var openBtn = document.getElementById('menu-open');
+    var closeBtn = document.getElementById('menu-close');
+    function set(open) {
+      if (!menu) return;
+      menu.classList.toggle('open', open);
+      menu.setAttribute('aria-hidden', open ? 'false' : 'true');
+      if (openBtn) openBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      document.body.style.overflow = open ? 'hidden' : '';
     }
-  };
-  btn?.addEventListener('click', () => toggle(true));
-  closeBtn?.addEventListener('click', () => toggle(false));
+    openBtn && openBtn.addEventListener('click', function () { set(true); });
+    closeBtn && closeBtn.addEventListener('click', function () { set(false); });
+    menu && menu.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', function () { set(false); }); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') set(false); });
+  })();
 </script>

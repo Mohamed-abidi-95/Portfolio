@@ -1,0 +1,37 @@
+---
+title: "LegalTN"
+subtitle: "Bilingual Arabic / French legal search over the Tunisian Labor Code — no LLM"
+tags: ["BM25", "OCR", "Arabizi", "Arabic normalization", "SymSpell", "CRF NER", "pytest"]
+category: "NLP"
+context: "ESPRIM NLP project"
+period: "2026"
+team: "Team project"
+metrics:
+  - { value: "~500", label: "articles per language" }
+  - { value: "291", label: "PDF pages processed with OCR" }
+  - { value: "79", label: "automated tests" }
+order: 3
+featured: true
+---
+
+## The idea
+Workers and HR staff in Tunisia ask legal questions in **French, Arabic, Tunisian dialect or Arabizi** (Arabic written with Latin letters). LegalTN answers them from the **Tunisian Labor Code**, always citing the source article, and **abstains** when it does not know.
+
+## Building the corpus
+- Extracted around **500 articles per language** from a **291-page PDF** with OCR.
+- **Automatic AR/FR alignment** so each Arabic article is linked to its French version.
+
+## Search engine
+- **BM25** retrieval with **abstention** and **source citation**: no LLM, so no invented answers.
+- Questions accepted in French, Arabic, Tunisian dialect or Arabizi.
+
+## Multilingual preprocessing
+- **Arabizi transliteration** and **Arabic normalization**.
+- Spelling correction with **SymSpell**.
+- Named-entity recognition with **CRF**.
+
+## Quality
+The project ships with **79 automated tests**.
+
+## What I learned
+For legal content, a precise retriever that cites the article and knows when to say "I don't know" is more useful than a fluent generator.

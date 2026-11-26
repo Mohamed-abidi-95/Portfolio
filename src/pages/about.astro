@@ -1,171 +1,127 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Badge from '../components/ui/Badge.astro';
-import Card from '../components/ui/Card.astro';
-import { skillCategories } from '../data/skills';
-import { experiences, educationList, certificationsList } from '../data/experience';
-import { ExternalLink } from 'lucide-react';
+import { person, experiences, education, languages, softSkills, skillGroups } from '../data/profile';
+
+const timeline = [
+  ...experiences.map((e) => ({ when: e.period, title: e.company, sub: e.role, color: e.color, kind: 'Internship' })),
+  ...education.map((e, i) => ({ when: e.period, title: e.school, sub: e.degree, color: ['var(--pink)', 'var(--cyan)', 'var(--lime)'][i], kind: 'Education' })),
+];
 ---
 
-<BaseLayout title="About | Mohamed Abidi">
-  <div class="container mx-auto px-4 max-w-4xl">
-    
-    <header class="mb-14">
-      <div class="flex items-center gap-3 mb-3">
-        <div class="section-line"></div>
-        <span class="text-[11px] tracking-[0.16em] uppercase font-mono font-semibold" style="color: var(--color-accent);">Profile & Background</span>
+<BaseLayout title="About — Mohamed Abidi">
+  <div class="mesh opacity-70" aria-hidden="true"><div class="blob b1"></div><div class="blob b3"></div></div>
+
+  <div class="wrap relative z-10 pb-24">
+    <!-- Intro -->
+    <section class="grid lg:grid-cols-[1.3fr_0.7fr] gap-12 items-end">
+      <div>
+        <p class="eyebrow rise rise-1">About</p>
+        <h1 class="h-display mt-5 text-[clamp(52px,9vw,124px)] rise rise-2">
+          <span style="color: var(--ink);">Hi, I'm </span><span class="grad-text">Mohamed.</span>
+        </h1>
+        <p class="mt-8 text-[clamp(19px,2.2vw,24px)] leading-snug max-w-[46ch] rise rise-3" style="color: var(--ink);">
+          {person.summary}
+        </p>
+        <p class="mt-5 text-[17px] leading-relaxed max-w-[56ch] rise rise-4" style="color: var(--muted);">
+          My goal: {person.goal.charAt(0).toLowerCase() + person.goal.slice(1)}
+        </p>
       </div>
-      <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-6" style="color: var(--text-primary);">About Me</h1>
-      <p class="text-lg md:text-xl leading-relaxed" style="color: var(--text-muted);">
-        I am an engineering student in Data Science & AI (3rd year at ESPRIM) with two 1-month industrial internships (DRÄXLMAIER, ETIC Europe). I like connecting machine learning with solid software engineering, from data preparation to working prototypes.
-      </p>
-    </header>
 
-    <div class="grid md:grid-cols-3 gap-12">
-      <div class="md:col-span-2 space-y-16">
-        
-        {/* Experience Timeline */}
-        <section>
-          <h2 class="text-2xl font-bold tracking-tight mb-8 flex items-center gap-3" style="color: var(--text-primary);">
-            Experience
-          </h2>
-          <div class="space-y-10 pl-5 border-l-2" style="border-color: var(--color-accent-border);">
-            {experiences.map(exp => (
-              <div class="relative pl-5">
-                <div
-                  class="absolute w-3 h-3 rounded-full border-2"
-                  style={{
-                    background: 'var(--bg-color)',
-                    borderColor: 'var(--color-accent)',
-                    left: '-27px',
-                    top: '6px',
-                  }}
-                />
-                <div class="flex flex-wrap items-baseline justify-between gap-2 mb-1.5">
-                  <h3 class="text-lg font-bold" style={{ color: 'var(--text-primary)' }}>{exp.role}</h3>
-                  <span class="text-xs font-mono" style={{ color: 'var(--text-dim)' }}>{exp.date}</span>
-                </div>
-                <div class="text-sm font-semibold mb-3" style={{ color: 'var(--color-accent)' }}>{exp.company}</div>
-                <ul class="list-disc list-inside text-xs leading-relaxed space-y-2" style={{ color: 'var(--text-muted)' }}>
-                  {exp.bullets.map(bullet => (
-                    <li>{bullet}</li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Education */}
-        <section>
-          <h2 class="text-2xl font-bold tracking-tight mb-8" style="color: var(--text-primary);">Education</h2>
-          <div class="grid gap-4">
-            {educationList.map(edu => (
-              <div
-                class="p-5 rounded-xl border transition-colors"
-                style={{
-                  background: 'var(--bg-card)',
-                  borderColor: 'var(--border-card)',
-                  boxShadow: 'var(--card-shadow)',
-                }}
-              >
-                <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-1.5">
-                  <h3 class="font-bold text-sm md:text-base" style={{ color: 'var(--text-primary)' }}>{edu.degree}</h3>
-                  <span
-                    class="px-2.5 py-0.5 rounded text-[11px] font-mono w-fit font-semibold"
-                    style={{
-                      background: 'var(--color-accent-soft)',
-                      color: 'var(--color-accent)',
-                      border: '1px solid var(--color-accent-border)',
-                    }}
-                  >
-                    {edu.date}
-                  </span>
-                </div>
-                <div class="text-xs font-medium" style={{ color: 'var(--text-muted)' }}>{edu.institution}</div>
-              </div>
-            ))}
-          </div>
-        </section>
-
+      <div class="card p-7 rise rise-5" style="--acc: var(--lime);">
+        <span class="acc-bar" aria-hidden="true"></span>
+        <div class="flex items-center gap-3"><span class="live-dot" aria-hidden="true"></span><span class="font-semibold" style="color: var(--ink);">Available</span></div>
+        <p class="mt-4 font-display font-bold text-[26px] leading-tight tracking-tight" style="color: var(--ink);">{person.lookingFor}</p>
+        <p class="mt-2 text-[15px]" style="color: var(--muted);">{person.availability.charAt(0).toUpperCase() + person.availability.slice(1)}</p>
+        <div class="mt-5 flex flex-wrap gap-2">{person.countries.map((c) => <span class="chip">{c}</span>)}</div>
+        <p class="mt-5 text-[13px] font-mono" style="color: var(--dim);">Based in {person.location}</p>
       </div>
-      
-      <div class="space-y-12">
-        {/* Skills Grid */}
-        <section>
-          <h2 class="text-2xl font-bold tracking-tight mb-6" style="color: var(--text-primary);">Skill Domains</h2>
-          <div class="space-y-6">
-            {skillCategories.map(category => (
-              <div>
-                <h3 class="text-xs font-mono font-bold uppercase tracking-wider mb-3 pb-1 border-b" style={{ color: 'var(--color-accent)', borderColor: 'var(--border-color)' }}>
-                  {category.domain}
-                </h3>
-                <div class="space-y-2.5">
-                  {category.skills.map(skill => (
-                    <div>
-                      <div class="text-xs font-semibold" style={{ color: 'var(--text-primary)' }}>{skill.name}</div>
-                      <div class="text-[11px] leading-tight" style={{ color: 'var(--text-muted)' }}>
-                        {skill.context}
-                      </div>
-                    </div>
-                  ))}
-                </div>
+    </section>
+
+    <!-- Timeline -->
+    <section class="section !pb-0">
+      <p class="eyebrow reveal">Path</p>
+      <h2 class="h-section mt-4 reveal d1">From business computing <span class="grad-text">to AI engineering.</span></h2>
+
+      <ol class="timeline mt-12">
+        {timeline.map((t, i) => (
+          <li class:list={["reveal", `d${(i % 3) + 1}`]} style={`--c: ${t.color};`}>
+            <span class="dot" aria-hidden="true"></span>
+            <div class="card lift p-6 md:p-7" style={`--acc: ${t.color};`}>
+              <div class="flex flex-wrap items-center gap-3">
+                <span class="chip chip-acc">{t.when}</span>
+                <span class="font-mono text-[12px] uppercase tracking-[.14em]" style="color: var(--dim);">{t.kind}</span>
               </div>
-            ))}
-          </div>
-        </section>
+              <h3 class="mt-4 font-display font-extrabold text-[24px] md:text-[28px] tracking-[-0.03em] leading-tight" style="color: var(--ink);">{t.title}</h3>
+              <p class="mt-1 text-[15.5px]" style="color: var(--muted);">{t.sub}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </section>
 
-        {/* Certifications */}
-        <section>
-          <h2 class="text-2xl font-bold tracking-tight mb-6" style="color: var(--text-primary);">Certifications</h2>
-          <div class="space-y-3">
-            {certificationsList.map(cert => (
-              <div
-                class="p-3.5 rounded-xl border flex items-center justify-between transition-colors"
-                style={{
-                  background: 'var(--bg-card)',
-                  borderColor: 'var(--border-card)',
-                  boxShadow: 'var(--card-shadow)',
-                }}
-              >
-                <div>
-                  <div class="font-bold text-xs" style={{ color: 'var(--text-primary)' }}>{cert.title}</div>
-                  <div class="text-[11px] font-mono mt-0.5" style={{ color: 'var(--text-muted)' }}>
-                    {cert.issuer} {cert.date ? `· ${cert.date}` : ''}
-                  </div>
-                </div>
-                <span
-                  class="px-2 py-0.5 rounded text-[10px] font-mono font-semibold"
-                  style={{
-                    background: 'var(--color-accent-soft)',
-                    color: 'var(--color-accent)',
-                    border: '1px solid var(--color-accent-border)',
-                  }}
-                >
-                  Verified
-                </span>
-              </div>
-            ))}
+    <!-- Skills -->
+    <section class="section !pb-0">
+      <p class="eyebrow reveal">Skills</p>
+      <h2 class="h-section mt-4 reveal d1">Technical <span class="grad-text">skills</span>.</h2>
+      <div class="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {skillGroups.map((g, i) => (
+          <div class:list={["card lift p-6 reveal", `d${(i % 3) + 1}`]} style={`--acc: ${g.color};`}>
+            <span class="acc-bar" aria-hidden="true"></span>
+            <h3 class="font-display font-bold text-[20px] tracking-tight" style={`color: ${g.color};`}>{g.name}</h3>
+            <div class="mt-4 flex flex-wrap gap-2">{g.items.map((s) => <span class="chip">{s}</span>)}</div>
           </div>
-        </section>
-
-        {/* Languages */}
-        <section>
-          <h2 class="text-2xl font-bold tracking-tight mb-4" style="color: var(--text-primary);">Languages</h2>
-          <div class="flex flex-wrap gap-2">
-            <span class="px-3 py-1 rounded-full text-xs font-mono border" style="background: var(--bg-card); border-color: var(--border-color); color: var(--text-primary);">
-              English (B2)
-            </span>
-            <span class="px-3 py-1 rounded-full text-xs font-mono border" style="background: var(--bg-card); border-color: var(--border-color); color: var(--text-primary);">
-              French (B2)
-            </span>
-            <span class="px-3 py-1 rounded-full text-xs font-mono border" style="background: var(--bg-card); border-color: var(--border-color); color: var(--text-primary);">
-              Arabic (Native)
-            </span>
-          </div>
-        </section>
-
+        ))}
       </div>
-    </div>
+    </section>
+
+    <!-- Languages & soft skills -->
+    <section class="section !pb-0 grid gap-5 lg:grid-cols-2">
+      <div class="card p-7 md:p-9 reveal" style="--acc: var(--violet);">
+        <span class="acc-bar" aria-hidden="true"></span>
+        <h2 class="font-display font-extrabold text-[30px] tracking-[-0.03em]" style="color: var(--ink);">Languages</h2>
+        <div class="mt-6 space-y-5">
+          {languages.map((l) => (
+            <div>
+              <div class="flex justify-between text-[15px]"><span class="font-semibold" style="color: var(--ink);">{l.name}</span><span class="font-mono" style="color: var(--dim);">{l.level}</span></div>
+              <div class="mt-2 h-2.5 rounded-full overflow-hidden" style="background: var(--line);">
+                <div class="h-full rounded-full" style={`width: ${l.pct}%; background: var(--grad);`}></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div class="card p-7 md:p-9 reveal d1" style="--acc: var(--orange);">
+        <span class="acc-bar" aria-hidden="true"></span>
+        <h2 class="font-display font-extrabold text-[30px] tracking-[-0.03em]" style="color: var(--ink);">How I work</h2>
+        <div class="mt-6 grid grid-cols-2 gap-3">
+          {softSkills.map((s, i) => (
+            <div class="soft" style={`--c: ${['var(--violet)', 'var(--pink)', 'var(--orange)', 'var(--cyan)'][i % 4]};`}>{s}</div>
+          ))}
+        </div>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href={person.cv} download="Mohamed-Abidi-CV.pdf" class="btn btn-grad">Download CV ↓</a>
+          <a href="/contact" class="btn btn-ghost">Contact</a>
+        </div>
+      </div>
+    </section>
   </div>
 </BaseLayout>
+
+<style>
+  .timeline { position: relative; display: grid; gap: 18px; padding-left: 34px; }
+  .timeline::before {
+    content: ""; position: absolute; left: 9px; top: 8px; bottom: 8px; width: 3px; border-radius: 3px;
+    background: linear-gradient(var(--violet), var(--pink), var(--orange), var(--cyan), var(--lime));
+  }
+  .timeline li { position: relative; }
+  .timeline .dot {
+    position: absolute; left: -34px; top: 30px; width: 21px; height: 21px; border-radius: 50%;
+    background: var(--bg); border: 4px solid var(--c); box-shadow: 0 0 18px var(--c);
+  }
+  .soft {
+    padding: 16px; border-radius: 18px; font-weight: 650; font-size: 15.5px;
+    color: var(--ink);
+    background: color-mix(in oklab, var(--c) 12%, transparent);
+    border: 1px solid color-mix(in oklab, var(--c) 35%, transparent);
+  }
+</style>

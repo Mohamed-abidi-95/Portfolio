@@ -1,162 +1,123 @@
 ---
 import BaseLayout from './BaseLayout.astro';
-import Badge from '../components/ui/Badge.astro';
-import Button from '../components/ui/Button.astro';
-import { ArrowLeft, ExternalLink } from 'lucide-react';
-import type { CollectionEntry } from 'astro:content';
+import { getCollection, type CollectionEntry } from 'astro:content';
+import { categoryAccent } from '../lib/accent';
 
 interface Props {
   project: CollectionEntry<'projects'>;
 }
 
 const { project } = Astro.props;
-const { title, subtitle, tags, category, githubLink, demoLink, context, date } = project.data;
+const d = project.data;
+const acc = categoryAccent[d.category];
+
+const all = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+const idx = all.findIndex((p) => p.id === project.id);
+const next = all[(idx + 1) % all.length];
+
+const facts = [
+  { k: 'Context', v: d.context },
+  { k: 'Period', v: d.period },
+  d.role && { k: 'Role', v: d.role },
+  d.team && { k: 'Team', v: d.team },
+].filter(Boolean) as { k: string; v: string }[];
 ---
 
-<BaseLayout title={`${title} | Mohamed Abidi`}>
-  <article class="container mx-auto px-4 max-w-4xl">
-    <div class="mb-10">
-      <a
-        href="/projects"
-        class="inline-flex items-center text-xs font-semibold uppercase tracking-wider mb-6 transition-colors"
-        style="color: var(--text-muted); text-decoration: none;"
-        onmouseover="this.style.color='var(--color-accent)'"
-        onmouseout="this.style.color='var(--text-muted)'"
-      >
-        <ArrowLeft class="mr-2 h-3.5 w-3.5" />
-        Back to projects
-      </a>
-      
-      <div class="flex items-center gap-3 mb-4 flex-wrap">
-        <span
-          class="px-2.5 py-0.5 rounded text-[11px] font-mono font-semibold"
-          style={{
-            background: 'var(--color-accent-soft)',
-            color: 'var(--color-accent)',
-            border: '1px solid var(--color-accent-border)',
-          }}
-        >
-          {category}
-        </span>
-        <span class="text-xs font-mono" style={{ color: 'var(--text-muted)' }}>{context}</span>
-        <span class="text-xs font-mono" style={{ color: 'var(--text-dim)' }}>&bull;</span>
-        <span class="text-xs font-mono" style={{ color: 'var(--text-muted)' }}>{new Date(date).getFullYear()}</span>
-      </div>
-      
-      <h1 class="text-3xl md:text-5xl font-bold tracking-tight mb-4" style={{ color: 'var(--text-primary)' }}>{title}</h1>
-      <p class="text-lg md:text-xl leading-relaxed mb-6" style={{ color: 'var(--text-muted)' }}>{subtitle}</p>
-      
-      <div class="flex flex-wrap gap-2 mb-8">
-        {tags.map((tag) => (
-          <span
-            class="px-2 py-0.5 rounded text-[10px] font-mono"
-            style={{
-              background: 'var(--color-accent-soft)',
-              color: 'var(--color-accent)',
-              border: '1px solid var(--color-accent-border)',
-            }}
-          >
-            {tag}
-          </span>
+<BaseLayout title={`${d.title} — Mohamed Abidi`} description={d.subtitle}>
+  <div class="hero-glow" style={`--acc: ${acc};`} aria-hidden="true"></div>
+
+  <article class="wrap relative z-10 pb-24" style={`--acc: ${acc};`}>
+    <a href="/projects" class="back rise rise-1">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5m0 0 6 6m-6-6 6-6"/></svg>
+      All projects
+    </a>
+
+    <header class="mt-8 max-w-4xl">
+      <span class="chip chip-acc rise rise-2">{d.category}</span>
+      <h1 class="h-display mt-6 text-[clamp(46px,8vw,104px)] rise rise-3" style="color: var(--ink);">{d.title}</h1>
+      <p class="mt-6 text-[clamp(19px,2.2vw,25px)] leading-snug max-w-[40ch] rise rise-4" style="color: var(--muted);">{d.subtitle}</p>
+    </header>
+
+    <div class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 rise rise-5">
+      {facts.map((f) => (
+        <div class="fact">
+          <div class="font-mono text-[11.5px] uppercase tracking-[.16em]" style="color: var(--dim);">{f.k}</div>
+          <div class="mt-2 font-semibold text-[15.5px] leading-snug" style="color: var(--ink);">{f.v}</div>
+        </div>
+      ))}
+    </div>
+
+    {d.metrics && (
+      <div class="mt-4 grid gap-4 grid-cols-2 lg:grid-cols-4 rise rise-6">
+        {d.metrics.map((m) => (
+          <div class="card p-6" style={`--acc: ${acc};`}>
+            <span class="acc-bar" aria-hidden="true"></span>
+            <div class="stat-value text-[clamp(38px,5vw,56px)]" style="color: var(--acc);">{m.value}</div>
+            <div class="mt-2 text-[14px] leading-snug" style="color: var(--muted);">{m.label}</div>
+          </div>
         ))}
       </div>
+    )}
 
-      {(githubLink || demoLink) && (
-        <div class="flex items-center gap-4 pb-8 mb-8" style={{ borderBottom: '1px solid var(--border-color)' }}>
-          {githubLink && (
-            <a
-              href={githubLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold border transition-colors"
-              style={{
-                background: 'var(--bg-card)',
-                borderColor: 'var(--border-color)',
-                color: 'var(--text-primary)',
-                textDecoration: 'none',
-              }}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"></path><path d="M9 18c-4.51 2-5-2-7-2"></path></svg>
-              View Source
-            </a>
-          )}
-          {demoLink && (
-            <a
-              href={demoLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition-colors"
-              style={{
-                background: 'var(--btn-primary-bg)',
-                color: 'var(--btn-primary-text)',
-                textDecoration: 'none',
-              }}
-            >
-              <ExternalLink class="h-3.5 w-3.5" />
-              Live Demo
-            </a>
+    <div class="mt-14 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_300px] gap-12">
+      <div class="prose-x max-w-[72ch] min-w-0 overflow-x-auto">
+        <slot />
+      </div>
+
+      <aside class="lg:sticky lg:top-32 self-start space-y-5">
+        <div class="card p-6" style={`--acc: ${acc};`}>
+          <span class="acc-bar" aria-hidden="true"></span>
+          <h2 class="font-mono text-[11.5px] uppercase tracking-[.16em]" style="color: var(--dim);">Stack</h2>
+          <div class="mt-4 flex flex-wrap gap-2">{d.tags.map((t) => <span class="chip">{t}</span>)}</div>
+          {(d.githubLink || d.demoLink) && (
+            <div class="mt-6 flex flex-col gap-2">
+              {d.githubLink && <a href={d.githubLink} target="_blank" rel="noopener noreferrer" class="btn btn-ghost !justify-between">Source on GitHub <span aria-hidden="true">↗</span></a>}
+              {d.demoLink && <a href={d.demoLink} target="_blank" rel="noopener noreferrer" class="btn btn-grad !justify-between">Live demo <span aria-hidden="true">↗</span></a>}
+            </div>
           )}
         </div>
-      )}
+      </aside>
     </div>
 
-    {/* Prose container styled cleanly with theme variables */}
-    <div class="case-study-content max-w-none text-sm leading-relaxed" style={{ color: 'var(--text-muted)' }}>
-      <slot />
-    </div>
+    {next && next.id !== project.id && (
+      <a href={`/projects/${next.id}`} class="card next group mt-20 flex flex-col md:flex-row md:items-center justify-between gap-6 p-8 md:p-10 no-underline" style={`--acc: ${categoryAccent[next.data.category]};`}>
+        <span class="acc-bar" aria-hidden="true"></span>
+        <div>
+          <div class="font-mono text-[12px] uppercase tracking-[.16em]" style="color: var(--dim);">Next project</div>
+          <div class="mt-3 font-display font-extrabold text-[clamp(30px,4.5vw,52px)] tracking-[-0.035em] leading-none" style="color: var(--ink);">{next.data.title}</div>
+          <div class="mt-3 text-[15px]" style="color: var(--muted);">{next.data.subtitle}</div>
+        </div>
+        <span class="next-arrow" aria-hidden="true">→</span>
+      </a>
+    )}
   </article>
 </BaseLayout>
 
-<style is:global>
-  .case-study-content h2 {
-    color: var(--text-primary);
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-top: 2.5rem;
-    margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid var(--border-color);
+<style>
+  .hero-glow {
+    position: absolute; top: -10vh; left: 50%; transform: translateX(-50%);
+    width: min(1100px, 100%); height: 620px; border-radius: 50%;
+    background: radial-gradient(closest-side, color-mix(in oklab, var(--acc) 40%, transparent), transparent);
+    filter: blur(40px); opacity: .55; pointer-events: none; z-index: 0;
   }
-  .case-study-content h3 {
-    color: var(--text-primary);
-    font-size: 1.2rem;
-    font-weight: 600;
-    margin-top: 1.75rem;
-    margin-bottom: 0.75rem;
+  .back {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 8px 14px 8px 10px; border-radius: 999px;
+    font-size: 14px; font-weight: 500; text-decoration: none;
+    color: var(--muted); border: 1px solid var(--line-strong); background: var(--surface);
+    transition: color .2s, border-color .2s;
   }
-  .case-study-content p {
-    color: var(--text-muted);
-    line-height: 1.7;
-    margin-bottom: 1.25rem;
+  .back:hover { color: var(--ink); border-color: var(--acc); }
+  .fact {
+    padding: 18px 20px; border-radius: 20px;
+    background: var(--surface); border: 1px solid var(--line);
+    backdrop-filter: blur(12px);
   }
-  .case-study-content strong {
-    color: var(--text-primary);
+  .next-arrow {
+    display: inline-flex; align-items: center; justify-content: center; flex: none;
+    width: 72px; height: 72px; border-radius: 50%;
+    font-size: 30px; color: #fff; background: var(--acc);
+    transition: transform .5s cubic-bezier(.16,1,.3,1);
   }
-  .case-study-content ul, .case-study-content ol {
-    margin-bottom: 1.25rem;
-    padding-left: 1.25rem;
-  }
-  .case-study-content li {
-    margin-bottom: 0.5rem;
-    color: var(--text-muted);
-  }
-  .case-study-content table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 1.5rem;
-    font-size: 0.85rem;
-  }
-  .case-study-content th {
-    text-align: left;
-    padding: 0.75rem 1rem;
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    color: var(--text-primary);
-    font-weight: 600;
-  }
-  .case-study-content td {
-    padding: 0.75rem 1rem;
-    border: 1px solid var(--border-color);
-    color: var(--text-muted);
-  }
+  .next:hover .next-arrow { transform: translateX(8px) rotate(-8deg); }
 </style>

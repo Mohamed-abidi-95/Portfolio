@@ -1,5 +1,6 @@
 import { z, defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
+import { categories } from './lib/accent';
 
 const projectCollection = defineCollection({
   loader: glob({ pattern: "**/*.mdx", base: "./src/content/projects" }),
@@ -7,11 +8,15 @@ const projectCollection = defineCollection({
     title: z.string(),
     subtitle: z.string(),
     tags: z.array(z.string()),
-    category: z.enum(['AI/GenAI', 'Computer Vision', 'Full-Stack', 'Cybersecurity']),
+    category: z.enum(categories),
+    context: z.string(),
+    period: z.string(),
+    role: z.string().optional(),
+    team: z.string().optional(),
     githubLink: z.string().optional(),
     demoLink: z.string().optional(),
-    context: z.string(),
-    date: z.string(),
+    metrics: z.array(z.object({ value: z.string(), label: z.string() })).optional(),
+    order: z.number(),
     featured: z.boolean().default(false),
   }),
 });

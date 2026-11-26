@@ -1,45 +1,36 @@
 ---
-title: "GRC Platform Prototype"
-subtitle: "Full-stack governance, risk & compliance prototype for ISO 27001"
-tags: [".NET 8", "React", "PostgreSQL", "Docker", "pgvector", "ISO 27001"]
-category: "AI/GenAI"
-context: "DRÄXLMAIER (Aug 2026 · 1-month internship)"
-date: "2026-08-01"
+title: "Intelligent GRC Assistant"
+subtitle: "RAG prototype that compares internal policies with ISO 27001 / ISO 9001 requirements"
+tags: ["RAG", "Embeddings", "Vector DB", "ASP.NET Core 8", "React", "PostgreSQL", "RBAC", "Docker"]
+category: "GenAI & RAG"
+context: "DRÄXLMAIER Group Tunisia — IT Center"
+period: "Aug – Sep 2026"
+role: "AI & Enterprise Solutions Engineering Intern"
+githubLink: "https://github.com/Mohamed-abidi-95/Draxelmaier-Grc-Plateform"
+order: 2
 featured: true
 ---
 
-## Problem
-Tracking risks, policies, controls and audit evidence for ISO 27001 by hand is slow and hard to keep consistent. The goal was a single tool where compliance data lives in one place.
+## The problem
+Checking internal policies against standards such as **ISO 27001** and **ISO 9001** is slow manual work: someone has to read both sides and spot what is missing.
 
-## Context
-Built as a prototype during a 1-month AI summer internship at DRÄXLMAIER Group Tunisia – IT Center. *(Note: certain details are generalized to respect project confidentiality.)*
+## What I built
+During my internship at the DRÄXLMAIER IT Center, I built a **prototype** of an intelligent GRC (governance, risk & compliance) assistant. *(Some details are generalized to respect confidentiality.)*
 
-## Architecture
-- **Backend**: ASP.NET Core 8 (C#), Clean Architecture, MediatR / CQRS.
-- **Frontend**: React 19 + TypeScript + Tailwind.
-- **Data**: PostgreSQL via EF Core; file storage on MinIO.
-- **Infra**: local stack with docker-compose.
+- Designed a **RAG pipeline**: document ingestion, embeddings, semantic search and contextualized answer generation.
+- Used a **vector database** to compare internal policies with standard requirements.
+- Prototyped **compliance gap detection** and **automatic summarization** of audit documents.
 
-## Technology
-| Technology | Role |
+## Platform around the assistant
+| Layer | Technology |
 |---|---|
-| ASP.NET Core 8 | API, business logic, Clean Architecture |
-| React 19 + TypeScript | Web interface and dashboard |
-| PostgreSQL (EF Core) | Data model and audit trail |
-| MinIO | Evidence file storage |
-| JWT + RBAC | Authentication and role-based access (6 roles) |
-| pgvector | Schema prepared for a future RAG layer |
+| Backend | ASP.NET Core 8 (C#), Clean Architecture, MediatR / CQRS, REST API |
+| Frontend | React 19 + TypeScript + Tailwind |
+| Data | PostgreSQL (EF Core), MinIO for evidence files |
+| Security | JWT authentication, role-based access control |
+| Traceability | automatic audit trail of every change |
 
-## Modules implemented
-1. **Risks**: assessment and treatment.
-2. **Policies**: approval workflow.
-3. **Frameworks**: requirement ↔ control mapping.
-4. **Evidence** and **SoA report**.
-5. **Audits**: checklist, findings, corrective actions.
-6. **Dashboard**: rule-based compliance rate per framework (compliant / non-compliant / not assessed).
+The platform covers risks, policies with an approval workflow, requirement ↔ control mapping, evidence, SoA report, audits and a dashboard.
 
-## Engineering
-Every change is recorded in an automatic audit log by overriding `SaveChangesAsync` in EF Core. API endpoints are protected by JWT authentication and role-based access control. The project includes 3 unit tests (xUnit, Moq).
-
-## Status & next step
-The AI layer is **not finished**: the pgvector schema is in place, but the assistant interface is not yet connected. The next step is a RAG assistant over policies and ISO 27001 requirements.
+## What I learned
+For compliance, **traceability** matters as much as the AI: who changed what, who can see which document, and where each answer comes from.

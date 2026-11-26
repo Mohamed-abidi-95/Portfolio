@@ -1,141 +1,75 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
 import { getCollection } from 'astro:content';
+import { categories, categoryAccent } from '../../lib/accent';
 
-const projects = await getCollection('projects');
-const sortedProjects = projects.sort((a, b) => {
-  const order = ['ai-grc', 'etic-label-inspection', 'omnutrition', 'cyberhunter'];
-  return order.indexOf(a.id) - order.indexOf(b.id);
-});
-
-const categories = ["All", ...new Set(projects.map(p => p.data.category))];
+const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+const used = categories.filter((c) => projects.some((p) => p.data.category === c));
 ---
 
-<BaseLayout title="Projects | Mohamed Abidi">
-  <div class="container mx-auto px-4 max-w-5xl">
-    
-    <header class="mb-12 text-center md:text-left">
-      <div class="flex items-center justify-center md:justify-start gap-3 mb-3">
-        <div class="section-line"></div>
-        <span class="text-[11px] tracking-[0.16em] uppercase font-mono font-semibold" style="color: var(--color-accent);">Portfolio</span>
-      </div>
-      <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-4" style="color: var(--text-primary);">Projects</h1>
-      <p class="text-lg md:text-xl" style="color: var(--text-muted);">A selection of prototypes and engineering case studies I've built.</p>
+<BaseLayout title="Projects — Mohamed Abidi">
+  <div class="mesh opacity-60" aria-hidden="true"><div class="blob b1"></div><div class="blob b2"></div></div>
+
+  <div class="wrap relative z-10 pb-24">
+    <header class="max-w-3xl">
+      <p class="eyebrow rise rise-1">Work</p>
+      <h1 class="h-display mt-5 text-[clamp(52px,9vw,120px)] rise rise-2">
+        <span style="color: var(--ink);">All </span><span class="grad-text">projects.</span>
+      </h1>
+      <p class="mt-6 text-[18px] leading-relaxed rise rise-3" style="color: var(--muted);">
+        Internship prototypes and academic projects — RAG, multilingual search, computer vision and full-stack. Each one links to a short case study.
+      </p>
     </header>
 
-    {/* Filter Buttons */}
-    <div class="mb-10 flex flex-wrap gap-2 justify-center md:justify-start" id="filter-container">
-      {categories.map((cat, i) => (
-        <button 
-          class={`px-4 py-1.5 rounded-full text-xs font-semibold font-mono tracking-wide transition-colors border cursor-pointer ${
-            i === 0 
-              ? 'filter-active' 
-              : 'filter-inactive'
-          }`}
-          data-filter={cat === "All" ? "all" : cat}
-          style={i === 0 ? {
-            background: 'var(--color-accent)',
-            color: 'var(--btn-primary-text)',
-            borderColor: 'var(--color-accent)',
-          } : {
-            background: 'var(--bg-card)',
-            color: 'var(--text-muted)',
-            borderColor: 'var(--border-color)',
-          }}
-        >
-          {cat}
+    <div class="mt-12 flex flex-wrap gap-2 rise rise-4" id="filters" role="group" aria-label="Filter projects by category">
+      <button class="filter active" data-filter="all" style="--acc: var(--ink);" aria-pressed="true">All <span class="count">{projects.length}</span></button>
+      {used.map((c) => (
+        <button class="filter" data-filter={c} style={`--acc: ${categoryAccent[c]};`} aria-pressed="false">
+          {c} <span class="count">{projects.filter((p) => p.data.category === c).length}</span>
         </button>
       ))}
     </div>
 
-    {/* Projects Grid */}
-    <div class="grid md:grid-cols-2 gap-6" id="projects-grid">
-      {sortedProjects.map((project, idx) => (
-        <div
-          class="project-card rounded-2xl border flex flex-col transition-all duration-300 overflow-hidden"
-          data-category={project.data.category}
-          style={{
-            background: 'var(--bg-card)',
-            borderColor: 'var(--border-card)',
-            boxShadow: 'var(--card-shadow)',
-          }}
-        >
-          <a href={`/projects/${project.id}`} class="flex-grow p-6 md:p-8 flex flex-col" style="text-decoration: none;">
-            <div class="flex items-center justify-between gap-3 mb-4">
-              <span
-                class="px-2.5 py-0.5 rounded text-[11px] font-mono font-semibold"
-                style={{
-                  background: 'var(--color-accent-soft)',
-                  color: 'var(--color-accent)',
-                  border: '1px solid var(--color-accent-border)',
-                }}
-              >
-                {project.data.category}
-              </span>
-              <span class="text-xs font-mono" style={{ color: 'var(--text-dim)' }}>
-                {project.data.context}
-              </span>
-            </div>
-            
-            <h3 class="text-xl md:text-2xl font-bold mb-3 transition-colors hover:text-[var(--color-accent)]" style={{ color: 'var(--text-primary)' }}>
-              {project.data.title}
-            </h3>
-            
-            <p class="text-sm leading-relaxed mb-6 flex-grow" style={{ color: 'var(--text-muted)' }}>
-              {project.data.subtitle}
-            </p>
-            
-            <div class="flex flex-wrap gap-1.5 mt-auto pt-4" style={{ borderTop: '1px solid var(--border-color)' }}>
-              {project.data.tags.slice(0, 5).map(tag => (
-                <span
-                  class="px-2 py-0.5 rounded text-[10px] font-mono"
-                  style={{
-                    background: 'var(--color-accent-soft)',
-                    color: 'var(--color-accent)',
-                    border: '1px solid var(--color-accent-border)',
-                  }}
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-
-            <div class="pt-4 mt-2 flex items-center gap-1.5 text-xs font-semibold" style={{ color: 'var(--color-accent)' }}>
-              Read Case Study →
-            </div>
-          </a>
+    <div class="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3" id="grid">
+      {projects.map((p, i) => (
+        <div class="proj reveal" data-category={p.data.category}>
+          <ProjectCard project={p} index={i + 1} />
         </div>
       ))}
     </div>
   </div>
+</BaseLayout>
 
-  <script is:inline>
-    document.addEventListener('DOMContentLoaded', () => {
-      const filterBtns = document.querySelectorAll('#filter-container button');
-      const projectCards = document.querySelectorAll('.project-card');
+<style>
+  .filter {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 18px; border-radius: 999px; cursor: pointer;
+    font-size: 14px; font-weight: 600;
+    color: var(--muted); background: var(--surface);
+    border: 1px solid var(--line-strong);
+    transition: color .2s, background .2s, border-color .2s, transform .2s;
+  }
+  .filter:hover { color: var(--ink); border-color: var(--acc); transform: translateY(-1px); }
+  .filter .count { font-family: var(--font-mono); font-size: 12px; opacity: .7; }
+  .filter.active { color: var(--bg); background: var(--acc); border-color: var(--acc); }
+  .filter.active .count { opacity: .85; }
+</style>
 
-      filterBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-          filterBtns.forEach(b => {
-            b.style.background = 'var(--bg-card)';
-            b.style.color = 'var(--text-muted)';
-            b.style.borderColor = 'var(--border-color)';
-          });
-          btn.style.background = 'var(--color-accent)';
-          btn.style.color = 'var(--btn-primary-text)';
-          btn.style.borderColor = 'var(--color-accent)';
-
-          const filter = btn.getAttribute('data-filter');
-
-          projectCards.forEach(card => {
-            if (filter === 'all' || card.getAttribute('data-category') === filter) {
-              card.style.display = 'flex';
-            } else {
-              card.style.display = 'none';
-            }
-          });
+<script is:inline>
+  (function () {
+    var btns = document.querySelectorAll('#filters .filter');
+    var items = document.querySelectorAll('#grid .proj');
+    btns.forEach(function (b) {
+      b.addEventListener('click', function () {
+        var f = b.getAttribute('data-filter');
+        btns.forEach(function (x) { x.classList.toggle('active', x === b); x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+        items.forEach(function (it) {
+          var show = f === 'all' || it.getAttribute('data-category') === f;
+          it.style.display = show ? '' : 'none';
+          if (show) it.classList.add('in');
         });
       });
     });
-  </script>
-</BaseLayout>
+  })();
+</script>

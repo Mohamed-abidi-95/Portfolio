@@ -1,0 +1,31 @@
+---
+title: "AI Presentation Generator"
+subtitle: "Text in, 1–20 slide deck out (PPTX / PDF) — with a quantized local LLM"
+tags: ["Qwen2.5-3B", "Quantized LLM", "Constrained decoding", "Pydantic", "Streamlit", "PPTX / PDF"]
+category: "GenAI & RAG"
+context: "ESPRIM academic project"
+period: "2026"
+team: "Team of 5"
+githubLink: "https://github.com/Mohamed-abidi-95/SmartDeck"
+order: 5
+featured: true
+---
+
+## The idea
+A **Streamlit** app that turns a block of text into a **1–20 slide presentation**, exported as **PPTX or PDF**, using a **quantized local LLM** (**Qwen2.5-3B**).
+
+## Making the output reliable
+Small local models often return broken or incomplete JSON. To make every deck buildable:
+
+- **Constrained decoding**, so the model can only produce output that matches the expected structure.
+- **JSON validation with Pydantic** before any slide is rendered.
+
+## Benchmark
+We compared several open-source models on what matters for this task:
+
+- rate of **valid JSON**,
+- quality of **diagrams**,
+- **latency**.
+
+## What I learned
+With small models, reliability comes from constraining and validating the output, not from hoping the model behaves.

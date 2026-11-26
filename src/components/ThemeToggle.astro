@@ -1,0 +1,37 @@
+---
+// Light / dark switch. Pure HTML + inline script, no framework needed.
+---
+<button
+  type="button"
+  class="theme-toggle relative inline-flex items-center justify-center w-10 h-10 rounded-full cursor-pointer"
+  style="border: 1px solid var(--line-strong); background: var(--surface); color: var(--ink);"
+  aria-label="Toggle light / dark theme"
+  title="Toggle light / dark theme"
+>
+  <!-- sun (shown in dark mode) -->
+  <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2m-7.07-17.07 1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+  <!-- moon (shown in light mode) -->
+  <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+</button>
+
+<style>
+  .theme-toggle { transition: transform .3s cubic-bezier(.16,1,.3,1), border-color .25s; }
+  .theme-toggle:hover { transform: rotate(-20deg); border-color: var(--violet); }
+  .icon-moon { display: none; }
+  :global(html:not(.dark)) .icon-sun { display: none; }
+  :global(html:not(.dark)) .icon-moon { display: block; }
+</style>
+
+<script is:inline>
+  document.querySelectorAll('.theme-toggle').forEach(function (btn) {
+    if (btn.dataset.bound) return; btn.dataset.bound = '1';
+    btn.addEventListener('click', function () {
+      var root = document.documentElement;
+      var toDark = !root.classList.contains('dark');
+      root.classList.toggle('dark', toDark);
+      root.classList.toggle('light', !toDark);
+      try { localStorage.setItem('theme', toDark ? 'dark' : 'light'); } catch (e) {}
+      window.dispatchEvent(new CustomEvent('theme-change', { detail: { theme: toDark ? 'dark' : 'light' } }));
+    });
+  });
+</script>

@@ -1,44 +1,34 @@
 ---
 title: "ETIC Label Inspection"
-subtitle: "Label-inspection prototype for a production line using Computer Vision"
-tags: ["C#", ".NET 8", "OpenCvSharp4", "EAST", "Tesseract OCR", "QR codes"]
+subtitle: "Optical label inspection prototype for a production line"
+tags: ["OpenCV", "OpenCvSharp4", "EAST", "Tesseract OCR", "QR codes", "C#", ".NET 8", "WinForms"]
 category: "Computer Vision"
-context: "ETIC Europe (Jul 2026 · 1-month internship)"
-date: "2026-07-01"
+context: "ETIC Europe — Industrial Quality Control"
+period: "Jul 2026"
+role: "Computer Vision & C# Engineering Intern"
+githubLink: "https://github.com/Mohamed-abidi-95/ETICLabelInspectionDesktop"
+order: 4
 featured: true
 ---
 
-## Problem
+## The problem
 Checking labels on a production line by eye is slow and error-prone. The goal was a prototype that reads and checks label content automatically from camera images.
 
-## Context
-Built as a prototype during a 1-month Computer Vision summer internship at ETIC Europe (industrial quality control).
-
-## Architecture
-- **Preprocessing**: camera calibration, distortion correction, adaptive thresholding, denoising and orientation correction.
-- **Text detection**: EAST.
-- **Text reading**: OCR with Tesseract.
-- **QR codes**: decoding with OpenCV.
-- **Interface**: C# / .NET 8 WinForms desktop app to follow inspection results.
+## Pipeline
+1. **Acquisition**: image from the camera.
+2. **Calibration & correction**: camera calibration and lens-distortion correction for image-based metrology.
+3. **Preprocessing**: adaptive thresholding, denoising and orientation correction, to cope with varying angles and lighting.
+4. **Text detection**: EAST locates text regions.
+5. **Reading**: Tesseract OCR extracts the text; QR codes are decoded with OpenCV.
+6. **Monitoring**: a .NET 8 / WinForms desktop application shows results and real-time KPIs.
 
 ## Technology
 | Technology | Role |
 |---|---|
-| OpenCV / OpenCvSharp4 | Image preprocessing, calibration, QR reading |
+| OpenCV / OpenCvSharp4 | Preprocessing, calibration, QR decoding |
 | EAST | Text region detection |
 | Tesseract | OCR on detected regions |
-| C# / .NET 8 (WinForms) | Desktop interface |
-
-## Pipeline
-1. **Acquisition**: image from the camera.
-2. **Calibration & correction**: lens distortion and orientation corrected.
-3. **Preprocessing**: adaptive thresholding and denoising to handle varying angles and lighting.
-4. **Detection**: EAST locates text regions.
-5. **Reading**: Tesseract extracts text; QR codes are decoded.
-6. **Display**: results shown in the desktop interface.
-
-## Challenges
-Labels are seen under **varying angles and lighting**. Calibration, distortion correction and adaptive preprocessing were the main levers to make text detection and OCR more stable.
+| C# / .NET 8 (WinForms) | Desktop app with real-time KPIs |
 
 ## What I learned
-Computer Vision on real industrial images is very different from clean academic datasets: lighting, angle and camera geometry matter as much as the model.
+On real industrial images, lighting, angle and camera geometry matter as much as the model. Calibration and preprocessing did most of the work.

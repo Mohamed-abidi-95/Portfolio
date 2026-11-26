@@ -1,23 +1,34 @@
 ---
+import { person } from '../data/profile';
+const year = 2026;
 ---
-<footer
-  class="transition-colors duration-300"
-  style="border-top: 1px solid var(--border-color); padding: 28px 0; background: var(--nav-bg);"
->
-  <div class="container mx-auto px-5 sm:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
-    
-    <span style="color: var(--text-primary); font-size: 14px; font-weight: 600; letter-spacing: -0.02em;">
-      Mohamed <span style="color: var(--color-accent);">ABIDI</span>
-    </span>
 
-    <div class="flex items-center gap-6 text-xs font-medium" style="color: var(--text-muted);">
-      <a href="https://github.com/Mohamed-abidi-95" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--color-accent)'" onmouseout="this.style.color='var(--text-muted)'">GitHub</a>
-      <a href="https://www.linkedin.com/in/mohamed-abidi95000" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--color-accent)'" onmouseout="this.style.color='var(--text-muted)'">LinkedIn</a>
-      <a href="mailto:Mohamed.abidi@esprim.tn" style="color: inherit; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--color-accent)'" onmouseout="this.style.color='var(--text-muted)'">Email</a>
+<footer class="relative overflow-hidden" style="border-top: 1px solid var(--line);">
+  <div class="wrap py-14">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-10">
+      <div>
+        <p class="h-display text-[clamp(44px,9vw,120px)] select-none" aria-hidden="true">
+          <span class="grad-text">Mohamed</span> <span style="color: var(--ink);">Abidi</span>
+        </p>
+        <p class="mt-4 text-[15px]" style="color: var(--muted);">
+          AI Engineer · Data Scientist — looking for a {person.lookingFor} {person.availability}.
+        </p>
+      </div>
+      <nav class="flex flex-wrap gap-2" aria-label="Footer">
+        <a class="chip footer-chip" href={`mailto:${person.email}`}>Email</a>
+        <a class="chip footer-chip" href={person.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
+        <a class="chip footer-chip" href={person.github} target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+        <a class="chip footer-chip" href={person.cv} download="Mohamed-Abidi-CV.pdf">CV ↓</a>
+      </nav>
     </div>
-
-    <span style="color: var(--text-dim); font-size: 11px; font-family: 'JetBrains Mono', monospace;">
-      AI Systems & Engineering · 2026
-    </span>
+    <div class="mt-12 pt-6 flex flex-col sm:flex-row justify-between gap-2 text-[13px] font-mono" style="border-top: 1px solid var(--line); color: var(--dim);">
+      <span>© {year} Mohamed Abidi</span>
+      <span>Built with Astro · Hosted on Cloudflare</span>
+    </div>
   </div>
 </footer>
+
+<style>
+  .footer-chip { text-decoration: none; padding: 10px 16px; font-size: 13px; transition: color .2s, border-color .2s; }
+  .footer-chip:hover { color: var(--ink); border-color: var(--pink); }
+</style>

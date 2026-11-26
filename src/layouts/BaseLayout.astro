@@ -6,48 +6,93 @@ import Footer from '../components/Footer.astro';
 interface Props {
   title: string;
   description?: string;
+  /** Home page: content starts under the floating nav, no top padding. */
+  bleed?: boolean;
 }
 
-const { title, description = "Mohamed Abidi — AI Engineer & Data Scientist specializing in Generative AI, RAG, AI Agents and Computer Vision." } = Astro.props;
+const {
+  title,
+  description = "Mohamed Abidi — AI Engineer & Data Scientist. Data Science & AI engineering student specializing in RAG, generative AI for document analysis and Arabic/French NLP. Looking for a 6-month PFE from February 2027.",
+  bleed = false,
+} = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
-    <meta name="description" content={description} />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#07060D" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
-    
-    <!-- FOUC prevention & theme initialization -->
+
+    <!-- Theme (dark by default, remembers the visitor's choice) + JS flag for reveal animations -->
     <script is:inline>
-      (function() {
-        const saved = localStorage.getItem('theme');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        const theme = saved ? saved : (prefersDark ? 'dark' : 'light');
-        if (theme === 'dark') {
-          document.documentElement.classList.add('dark');
-          document.documentElement.classList.remove('light');
-        } else {
-          document.documentElement.classList.add('light');
-          document.documentElement.classList.remove('dark');
-        }
+      (function () {
+        var root = document.documentElement;
+        root.classList.add('js');
+        var saved = null;
+        try { saved = localStorage.getItem('theme'); } catch (e) {}
+        if (saved === 'light') { root.classList.remove('dark'); root.classList.add('light'); }
+        else { root.classList.add('dark'); root.classList.remove('light'); }
       })();
     </script>
-    
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
     <title>{title}</title>
   </head>
-  <body class="bg-[var(--bg-color)] text-[var(--text-primary)] antialiased min-h-screen flex flex-col transition-colors duration-300">
+  <body class="grain min-h-screen flex flex-col">
+    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[200] btn btn-grad">Skip to content</a>
     <Header />
-    <main class="flex-grow py-12 px-5 sm:px-8">
+    <main id="main" class:list={["flex-grow relative", !bleed && "pt-32 md:pt-40"]}>
       <slot />
     </main>
     <Footer />
+
+    <script is:inline>
+      // Scroll reveal
+      (function () {
+        var els = document.querySelectorAll('.reveal');
+        if (!('IntersectionObserver' in window)) { els.forEach(function (e) { e.classList.add('in'); }); return; }
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
+        }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+        els.forEach(function (e) { io.observe(e); });
+      })();
+
+      // Cursor spotlight on cards
+      document.addEventListener('pointermove', function (ev) {
+        var card = ev.target && ev.target.closest ? ev.target.closest('.card') : null;
+        if (!card) return;
+        var r = card.getBoundingClientRect();
+        card.style.setProperty('--mx', (ev.clientX - r.left) + 'px');
+        card.style.setProperty('--my', (ev.clientY - r.top) + 'px');
+      }, { passive: true });
+
+      // Word rotators: <span data-rotator><span>a</span><span>b</span></span>
+      (function () {
+        var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        document.querySelectorAll('[data-rotator]').forEach(function (rot) {
+          var words = rot.children; if (!words.length) return;
+          var i = 0; words[0].classList.add('on');
+          if (reduce || words.length < 2) return;
+          setInterval(function () {
+            var cur = words[i]; cur.classList.remove('on'); cur.classList.add('off');
+            setTimeout(function () { cur.classList.remove('off'); }, 600);
+            i = (i + 1) % words.length; words[i].classList.add('on');
+          }, 2600);
+        });
+      })();
+    </script>
   </body>
 </html>

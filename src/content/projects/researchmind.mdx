@@ -1,0 +1,44 @@
+---
+title: "ResearchMind AI"
+subtitle: "Multimodal scientific RAG platform — I led the fully local video module"
+tags: ["faster-whisper", "BM25", "Multilingual E5", "RRF", "Cross-encoder", "Qwen 2.5 3B", "Ollama", "FastAPI", "Next.js", "Docker"]
+category: "GenAI & RAG"
+context: "ESPRIM integrated project"
+period: "Oct – Nov 2026"
+role: "Lead of the video module"
+team: "Team of 5"
+githubLink: "https://github.com/Mohamed-abidi-95/ResearchMindAI"
+metrics:
+  - { value: "0.95", label: "Recall@3" }
+  - { value: "0.85", label: "MRR (hard set)" }
+  - { value: "100%", label: "off-topic questions rejected, no false rejections" }
+  - { value: "35", label: "automated tests" }
+order: 1
+featured: true
+---
+
+## The idea
+ResearchMind AI is a multimodal RAG SaaS platform for scientific content, built as an ESPRIM integrated project by a team of five. I led the **video module**: asking questions about a video and getting an extractive answer **cited to the second**.
+
+## Pipeline
+1. **Transcription**: local speech-to-text with **faster-whisper** on GPU.
+2. **Chunking**: timestamped chunks, so every passage keeps its position in the video.
+3. **Hybrid search**: **BM25** + **multilingual E5** embeddings, merged with **Reciprocal Rank Fusion (RRF)**.
+4. **Reranking**: a **cross-encoder** reorders the best candidates.
+5. **Generation**: a fully local LLM (**Qwen 2.5 3B** via **Ollama**).
+6. **Verification**: evidence sentences are checked, and answers are **extractive** and cited to the second.
+
+## Evaluation
+I built an evaluation protocol instead of judging answers by eye:
+
+| Metric | Result |
+|---|---|
+| Recall@3 | **0.95** |
+| MRR on the hard set | **0.85** |
+| Off-topic questions rejected | **100%**, with no false rejections |
+
+## Engineering
+The module is integrated in the platform with **FastAPI** and **Next.js**, uses **SQLAlchemy**, ships with **35 automated tests** and runs in **Docker**.
+
+## What I learned
+A RAG system is only as good as its evaluation. Measuring retrieval (Recall@k, MRR) and testing refusals on off-topic questions told me far more than reading a few nice answers.
