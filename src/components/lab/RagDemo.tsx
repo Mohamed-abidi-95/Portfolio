@@ -22,7 +22,7 @@ export function RagDemo() {
     setTimeout(() => {
       setMessages(prev => [...prev, { 
         role: 'assistant', 
-        content: `(Simulated response) Based on the available context, Mohamed is an AI Engineer who built an AI-GRC platform at DRÄXLMAIER and an industrial inspection system at ETIC Europe.` 
+        content: `(Simulated response) Based on the available context, Mohamed is a Data Science & AI engineering student who built a GRC platform prototype at DRÄXLMAIER and a label-inspection prototype at ETIC Europe.` 
       }]);
       setLoading(false);
     }, 1500);

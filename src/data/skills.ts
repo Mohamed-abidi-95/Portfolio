@@ -15,16 +15,16 @@ export const skillCategories: SkillCategory[] = [
       { name: "LLMs", context: "Prompt engineering, context window management, structured outputs" },
       { name: "RAG Systems", context: "Hybrid search, chunking strategies, semantic retrieval" },
       { name: "Embeddings & Vector Search", context: "Vector DBs, embedding models, similarity metrics" },
-      { name: "AI Agents & MCP", context: "Tool calling, Model Context Protocol, autonomous workflows" }
+      { name: "Function Calling", context: "Gemini API, tool calling, structured JSON outputs" }
     ]
   },
   {
     domain: "Computer Vision",
     skills: [
-      { name: "YOLO (v8/v11)", context: "Real-time industrial defect & object detection" },
-      { name: "OpenCV / OpenCvSharp", context: "Image preprocessing, morphological filters, feature detection" },
-      { name: "OCR", context: "Text & label extraction for automated quality inspection" },
-      { name: "ONNX Runtime", context: "Optimized multi-platform model inference" }
+      { name: "OpenCV / OpenCvSharp", context: "Image preprocessing, calibration, distortion correction" },
+      { name: "OCR (Tesseract)", context: "Text extraction for label inspection" },
+      { name: "Text Detection & QR", context: "EAST text detector, QR-code reading" },
+      { name: "YOLO", context: "Basics: object detection" }
     ]
   },
   {
@@ -40,7 +40,7 @@ export const skillCategories: SkillCategory[] = [
     domain: "Software Engineering",
     skills: [
       { name: "Python", context: "FastAPI, PyTorch, data processing, scientific stack" },
-      { name: "C# / .NET 8", context: "Enterprise backend architecture, clean architecture" },
+      { name: "C# / .NET 8", context: "ASP.NET Core, Clean Architecture, MediatR / CQRS" },
       { name: "REST APIs & System Design", context: "Scalable service interfaces, contract-first design" },
       { name: "PostgreSQL & Docker", context: "Relational data modeling, pgvector, container isolation" }
     ]

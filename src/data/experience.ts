@@ -20,23 +20,23 @@ export interface Certification {
 
 export const experiences: Experience[] = [
   {
-    role: "IT & AI Engineering Intern",
-    company: "DRÄXLMAIER",
-    date: "2026",
+    role: "AI Summer Intern",
+    company: "DRÄXLMAIER Group Tunisia – IT Center",
+    date: "Aug 2026 · 1 month",
     bullets: [
-      "Monitored virtualized enterprise infrastructure.",
-      "Architected an AI-GRC compliance platform using .NET 8, PostgreSQL, and Docker.",
-      "Implemented a specialized RAG pipeline automating ISO 27001 compliance audit gap detection."
+      "Built a full-stack GRC (governance, risk, compliance) prototype: ASP.NET Core 8 (Clean Architecture, MediatR/CQRS), React 19 + TypeScript, PostgreSQL (EF Core), MinIO.",
+      "Implemented risk, policy-approval, framework mapping, evidence, SoA report and audit modules, with JWT auth and role-based access (6 roles).",
+      "Added an automatic audit log of all changes and a rule-based compliance rate per framework; prepared a pgvector schema for a future RAG layer (not finished)."
     ]
   },
   {
-    role: "AI & Computer Vision Developer",
+    role: "Computer Vision Summer Intern",
     company: "ETIC Europe",
-    date: "2025 - 2026",
+    date: "Jul 2026 · 1 month",
     bullets: [
-      "Engineered an industrial quality inspection system with C#, .NET, and OpenCvSharp.",
-      "Deployed YOLOv8 and ONNX Runtime for real-time high-throughput defect detection.",
-      "Integrated OCR text verification and persisted validation results in SQL Server."
+      "Built a label-inspection prototype for a production line with OpenCV / OpenCvSharp4.",
+      "Combined text detection (EAST), OCR (Tesseract) and QR-code reading, with camera calibration, distortion correction and preprocessing for varying angles and lighting.",
+      "Developed a C# / .NET 8 WinForms desktop interface to follow inspection results."
     ]
   }
 ];
@@ -64,9 +64,9 @@ export const educationList: Education[] = [
     date: "2024 - Present"
   },
   {
-    degree: "Preparatory Classes",
+    degree: "Bachelor in Business Computing – Business Information Systems",
     institution: "ESPRIT School of Business",
-    date: "2022 - 2023"
+    date: "2019 - 2023"
   },
   {
     degree: "Baccalauréat (Experimental Sciences)",

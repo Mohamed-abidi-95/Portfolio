@@ -10,8 +10,8 @@ const NAV_LINKS = [
 ];
 
 const FOCUS_ITEMS = [
-  { title: 'Generative AI',   sub: 'LLMs · RAG · AI Agents · MCP' },
-  { title: 'Computer Vision', sub: 'YOLO · OCR · OpenCV · ONNX' },
+  { title: 'Generative AI',   sub: 'LLMs · RAG · Function calling' },
+  { title: 'Computer Vision', sub: 'OpenCV · OCR · Text detection' },
   { title: 'Data Science',    sub: 'ML · Analytics · Modeling' },
   { title: 'System Design',   sub: 'Architecture · APIs · DevOps' },
 ];
@@ -157,6 +157,20 @@ export function HeroSection() {
           background: isDark
             ? 'linear-gradient(to bottom, rgba(5,8,5,0.55) 0%, transparent 24%)'
             : 'linear-gradient(to bottom, rgba(244,242,234,0.65) 0%, transparent 24%)',
+          pointerEvents: 'none',
+          transition: 'background 0.5s ease',
+        }}
+      />
+
+      {/* 3b. Mobile only: on narrow screens the silhouette sits behind the text,
+             so darken (or lighten) the whole frame to keep the headline readable */}
+      <div
+        className="md:hidden"
+        style={{
+          position: 'absolute',
+          inset: 0,
+          zIndex: 1,
+          background: isDark ? 'rgba(5,8,5,0.62)' : 'rgba(244,242,234,0.68)',
           pointerEvents: 'none',
           transition: 'background 0.5s ease',
         }}
@@ -443,7 +457,7 @@ export function HeroSection() {
                 animation: 'fadeInUp 0.55s ease 0.4s forwards',
               }}
             >
-              From RAG pipelines to Computer Vision — I engineer AI systems designed to work in production.
+              From RAG to Computer Vision — I build AI prototypes on real industrial problems.
             </p>
 
             {/* 5. CTAs: View My Work & Contact Me only (Clean & Focused) */}
